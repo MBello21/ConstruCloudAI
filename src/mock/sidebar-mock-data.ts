@@ -5,14 +5,8 @@ import {
   Users,
   BarChart3,
   Settings,
-  type LucideIcon,
 } from "lucide-react";
-
-interface Navegation {
-  icon: LucideIcon;
-  label: string;
-  path: string;
-}
+import type { Navegation } from "../types";
 
 export const NAVEGATION: Navegation[] = [
   {

@@ -1,13 +1,17 @@
-export const PRESUPUESTOS_MOCK = [
+import type { Presupuesto } from "../types";
+
+export const PRESUPUESTOS_MOCK: Presupuesto[] = [
   {
     id: 1,
+    codigo: "PRES-A7982A38",
     titulo: "Pintura completa piso 3 habitaciones",
     total: 4152.72,
-    estado: "Borrador",
+    estado: "Enviado",
     created_at: "2026-07-22T11:44:14.712360+00:00",
   },
   {
     id: 2,
+    codigo: "PRES-C0B3E3D4",
     titulo: "Reforma cocina piso Cádiz",
     total: 2952.88,
     estado: "Borrador",
@@ -15,25 +19,42 @@ export const PRESUPUESTOS_MOCK = [
   },
   {
     id: 3,
-    titulo:
-      "Reforma integral de baño de 6m2. Demolición de alicatado y solado existente, nuevo alicatado hasta techo, solado antideslizante, sustitución de inodoro, lavamanos empotrado, plato de ducha de 80x80 con mampara fija, nueva instalación de fontanería y electricidad, pintura techo.",
+    codigo: "PRES-05541BDD",
+    titulo: "Reforma integral Cádiz",
     total: 4761.35,
     estado: "Borrador",
     created_at: "2026-07-23T19:50:46.073159+00:00",
   },
   {
     id: 4,
-    titulo:
-      "Reforma integral de baño de 6m2. Demolición de alicatado y solado existente, nuevo alicatado hasta techo, solado antideslizante, sustitución de inodoro, lavamanos empotrado, plato de ducha de 80x80 con mampara fija, nueva instalación de fontanería y electricidad, pintura techo.",
+    codigo: "PRES-9F841BB8",
+    titulo: "Reforma integral Cádiz",
     total: 4761.35,
-    estado: "Borrador",
+    estado: "Pendiente",
     created_at: "2026-07-23T19:55:26.550667+00:00",
   },
   {
     id: 5,
+    codigo: "PRES-524F6E4C",
     titulo: "Reforma completa baño principal",
     total: 5069.9,
-    estado: "Borrador",
+    estado: "En Revisión",
+    created_at: "2026-07-23T19:59:14.456374+00:00",
+  },
+  {
+    id: 6,
+    codigo: "PRES-524F6E2C",
+    titulo: "Reforma completa baño principal",
+    total: 5069.9,
+    estado: "Aprobado",
+    created_at: "2026-07-23T19:59:14.456374+00:00",
+  },
+  {
+    id: 7,
+    codigo: "PRES-524F6E3C",
+    titulo: "Reforma completa baño principal",
+    total: 5069.9,
+    estado: "Rechazado",
     created_at: "2026-07-23T19:59:14.456374+00:00",
   },
 ];

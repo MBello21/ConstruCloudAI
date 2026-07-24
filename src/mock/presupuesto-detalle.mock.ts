@@ -1,4 +1,4 @@
-import type { PresupuestoDetalle } from "../types/presupuestos-with-detail.interfaces";
+import type { PresupuestoDetalle } from "../types";
 
 export const PRESUPUESTOS_CON_DETALLE: PresupuestoDetalle[] = [
   {
