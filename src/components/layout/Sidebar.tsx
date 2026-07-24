@@ -1,13 +1,13 @@
 import { NavLink } from "react-router";
 import { NAVEGATION } from "../../mock/sidebar-mock-data";
-
+import { HardHat } from "lucide-react";
 export const Sidebar = () => {
   return (
     <aside className="flex flex-col border-r border-slate-200 h-full">
       <div className="flex items-center p-3 border-b border-slate-200 h-16 ">
         <div className="flex gap-3 h-full w-70.5 ">
           <div className="bg-blue-950 w-10 h-10 flex justify-center items-center rounded-lg shadow-sm">
-            <i className="fa-solid fa-helmet-safety text-white text-lg"></i>
+            <HardHat className="text-white w-8 h-8" />
           </div>
           <div>
             <h3 className="text-h5 font-semibold text-slate-900">
