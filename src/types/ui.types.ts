@@ -27,3 +27,8 @@ export interface EstadoConfig {
   text: string;
   dot: string;
 }
+export interface SectionHeaderConfig {
+  title: string;
+  section?: string;
+  subtitle?: string;
+}
