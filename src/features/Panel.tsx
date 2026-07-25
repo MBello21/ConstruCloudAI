@@ -14,12 +14,15 @@ export const Panel = () => {
   const [filtro, setFiltro] = useState<string>("Todos");
   const [presupuestos, setPresupuestos] = useState<PresupuestoElement[]>([]);
   const [totalRegistros, setTotalRegistros] = useState(0);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const skip = (pagina - 1) * ITEMS_POR_PAGINA;
       const data = await getPresupuestos(skip);
       setPresupuestos(data.presupuestos);
       setTotalRegistros(data.total);
+      setTimeout(() => setLoading(false), 500);
     };
     fetchData();
   }, [pagina]);
@@ -47,16 +50,36 @@ export const Panel = () => {
           filtro={filtro}
           setFiltro={setFiltro}
         />
-        <TablaPresupuestos
-          presupuestos={presupuestosFiltrados}
-          formatearFecha={formatearFecha}
-          formatearPrecio={formatearPrecio}
-        />
-        <PaginacionTabla
-          pagina={pagina}
-          totalPaginas={totalPaginas}
-          onCambioPagina={handleCambioPagina}
-        />
+        {loading ? (
+          <div className="bg-white">
+            {Array.from({ length: 7 }).map((_, rowIndex) => (
+              <div
+                key={rowIndex}
+                className="flex items-center border-b border-gray-200 p-4 gap-4"
+              >
+                <div className="w-20 h-6 bg-gray-200 animate-pulse rounded" />
+                <div className="flex-1 h-6 bg-gray-200 animate-pulse rounded" />
+                <div className="w-28 h-6 bg-gray-200 animate-pulse rounded" />
+                <div className="w-24 h-6 bg-gray-200 animate-pulse rounded" />
+                <div className="w-20 h-6 bg-gray-200 animate-pulse rounded" />
+                <div className="w-16 h-6 bg-gray-200 animate-pulse rounded" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            <TablaPresupuestos
+              presupuestos={presupuestosFiltrados}
+              formatearFecha={formatearFecha}
+              formatearPrecio={formatearPrecio}
+            />
+            <PaginacionTabla
+              pagina={pagina}
+              totalPaginas={totalPaginas}
+              onCambioPagina={handleCambioPagina}
+            />
+          </>
+        )}
       </div>
     </section>
   );
