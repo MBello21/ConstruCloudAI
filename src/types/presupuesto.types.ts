@@ -14,6 +14,8 @@ export interface PresupuestoElement {
   created_at: string;
 }
 
+export type Presupuesto = PresupuestoElement;
+
 export type Estado =
   | "Borrador"
   | "Enviado"
