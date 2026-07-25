@@ -1,12 +1,12 @@
 export interface Detalle {
-  id: number;
-  numero: number;
+  id: number | string;
+  numero?: number;
   descripcion: string;
   cantidad: number;
-  unidad: Unidad;
+  unidad: string;
   precio_unitario: number;
   subtotal: number;
-  generado_por_ia: boolean;
+  generado_por_ia?: boolean;
 }
 
 export const Unidad = {

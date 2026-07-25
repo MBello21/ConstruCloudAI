@@ -1,35 +1,5 @@
 import { Plus, ChevronDown, ChevronRight, Trash2 } from "lucide-react";
-
-interface Detalle {
-  id: string;
-  descripcion: string;
-  unidad: string;
-  cantidad: number;
-  precio_unitario: number;
-  subtotal: number;
-}
-
-interface Capitulo {
-  id: string;
-  nombre: string;
-  abierto: boolean;
-  detalles: Detalle[];
-}
-
-interface SeccionCapitulosProps {
-  capitulos: Capitulo[];
-  onAgregarCapitulo: () => void;
-  onEliminarCapitulo: (id: string) => void;
-  onToggleCapitulo: (id: string) => void;
-  onActualizarNombreCapitulo: (id: string, nombre: string) => void;
-  onAgregarDetalle: (capituloId: string) => void;
-  onEliminarDetalle: (capituloId: string, detalleId: string) => void;
-  onActualizarDetalle: (
-    capituloId: string,
-    detalleId: string,
-    cambios: Partial<Detalle>,
-  ) => void;
-}
+import type { SeccionCapitulosProps, Detalle } from "../../types";
 
 const SeccionCapitulos: React.FC<SeccionCapitulosProps> = ({
   capitulos,
@@ -180,6 +150,7 @@ const SeccionCapitulos: React.FC<SeccionCapitulosProps> = ({
                                   }
                                   className="w-full px-2 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-950 focus:border-transparent"
                                   placeholder="Descripción del detalle"
+                                  title={detalle.descripcion}
                                 />
                               </td>
                               <td className="py-2 px-2">
