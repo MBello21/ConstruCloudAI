@@ -25,6 +25,7 @@ export type Estado =
   | "Rechazado";
 export interface PresupuestoDetalle {
   id: number;
+  codigo: string;
   titulo: string;
   descripcion: string;
   estado: string;
@@ -32,4 +33,5 @@ export interface PresupuestoDetalle {
   iva: number;
   total: number;
   capitulos: Capitulo[];
+  created_at?: string;
 }

@@ -7,6 +7,7 @@ import { Layout } from "./pages/Layout";
 import { NotFound } from "./pages/NotFound";
 import { Panel } from "./features/Panel";
 import { GenerarPresupuesto } from "./features/GenerarPresupuesto";
+import { DetallePresupuesto } from "./features/DetallePresupuesto";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -15,6 +16,7 @@ export const router = createBrowserRouter(
         <Route path="/" element={<Panel />} />
         <Route path="/nuevo-presupuesto" element={<GenerarPresupuesto />} />
       </Route>
+      <Route path="/presupuesto/:id" element={<DetallePresupuesto />} />
     </>,
   ),
 );
