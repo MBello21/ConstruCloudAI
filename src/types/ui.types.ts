@@ -38,6 +38,7 @@ export interface SectionHeaderConfig {
   title: string;
   section?: string;
   subtitle?: string;
+  pathname: string;
 }
 
 export interface FormularioGeneracionProps {

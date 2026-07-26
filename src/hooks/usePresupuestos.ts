@@ -4,7 +4,7 @@ import { getPresupuestos } from "../services/actions/get-presupuestos.action";
 
 const ITEMS_POR_PAGINA = 7;
 
-export const usePanel = () => {
+export const usePresupuestos = () => {
   const [pagina, setPagina] = useState(1);
   const [filtro, setFiltro] = useState<string>("Todos");
   const [presupuestos, setPresupuestos] = useState<PresupuestoElement[]>([]);
@@ -40,7 +40,7 @@ export const usePanel = () => {
     setFiltro,
     loading,
     totalRegistros,
-
+    ITEMS_POR_PAGINA,
     handleCambioPagina,
   };
 };
