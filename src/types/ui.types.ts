@@ -24,6 +24,10 @@ export interface TablaPresupuestosProps {
   formatearPrecio: (importe: number) => string;
 }
 
+export interface SckeletonTablaProps {
+  showPagination: boolean;
+}
+
 export interface PaginacionTablaProps {
   pagina: number;
   totalPaginas: number;
