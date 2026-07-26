@@ -1,44 +1,25 @@
-import { useEffect, useState } from "react";
 import CabeceraTabla from "../components/Panel/CabeceraTabla";
 import TablaPresupuestos from "../components/Panel/TablaPresupuestos";
 import PaginacionTabla from "../components/Panel/PaginacionTabla";
+import { SkeletonTabla } from "../components/Panel/SkeletonTabla";
 import { formatearFecha, formatearPrecio } from "../helpers";
-import type { PresupuestoElement } from "../types";
 import { SectionHeader } from "../components/ui/SectionHeader";
-import { getPresupuestos } from "../services/actions/get-presupuestos.action";
-
-const ITEMS_POR_PAGINA = 7;
+import { usePanel } from "../hooks/usePanel";
 
 export const Panel = () => {
-  const [pagina, setPagina] = useState(1);
-  const [filtro, setFiltro] = useState<string>("Todos");
-  const [presupuestos, setPresupuestos] = useState<PresupuestoElement[]>([]);
-  const [totalRegistros, setTotalRegistros] = useState(0);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const skip = (pagina - 1) * ITEMS_POR_PAGINA;
-      const data = await getPresupuestos(skip);
-      setPresupuestos(data.presupuestos);
-      setTotalRegistros(data.total);
-      setTimeout(() => setLoading(false), 500);
-    };
-    fetchData();
-  }, [pagina]);
-  const presupuestosFiltrados =
-    filtro === "Todos"
-      ? presupuestos
-      : presupuestos.filter((p) => p.estado === filtro);
-
-  const totalPaginas = Math.ceil(totalRegistros / ITEMS_POR_PAGINA);
-
-  const handleCambioPagina = (nuevaPagina: number): void => {
-    setPagina(nuevaPagina);
-  };
+  const {
+    presupuestos,
+    filtro,
+    setFiltro,
+    loading,
+    presupuestosFiltrados,
+    totalPaginas,
+    pagina,
+    handleCambioPagina,
+  } = usePanel();
 
   return (
-    <section className="p-3 px-5 bg-gray-100 h-full">
+    <section className="p-3 px-5 min-h-full bg-gray-100">
       <SectionHeader
         title="PANEL GENERAL"
         section="Presupuesto de obra"
@@ -50,36 +31,24 @@ export const Panel = () => {
           filtro={filtro}
           setFiltro={setFiltro}
         />
-        {loading ? (
-          <div className="bg-white">
-            {Array.from({ length: 7 }).map((_, rowIndex) => (
-              <div
-                key={rowIndex}
-                className="flex items-center border-b border-gray-200 p-4 gap-4"
-              >
-                <div className="w-20 h-6 bg-gray-200 animate-pulse rounded" />
-                <div className="flex-1 h-6 bg-gray-200 animate-pulse rounded" />
-                <div className="w-28 h-6 bg-gray-200 animate-pulse rounded" />
-                <div className="w-24 h-6 bg-gray-200 animate-pulse rounded" />
-                <div className="w-20 h-6 bg-gray-200 animate-pulse rounded" />
-                <div className="w-16 h-6 bg-gray-200 animate-pulse rounded" />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <>
-            <TablaPresupuestos
-              presupuestos={presupuestosFiltrados}
-              formatearFecha={formatearFecha}
-              formatearPrecio={formatearPrecio}
-            />
-            <PaginacionTabla
-              pagina={pagina}
-              totalPaginas={totalPaginas}
-              onCambioPagina={handleCambioPagina}
-            />
-          </>
-        )}
+        <div className="min-h-112">
+          {loading ? (
+            <SkeletonTabla />
+          ) : (
+            <>
+              <TablaPresupuestos
+                presupuestos={presupuestosFiltrados}
+                formatearFecha={formatearFecha}
+                formatearPrecio={formatearPrecio}
+              />
+              <PaginacionTabla
+                pagina={pagina}
+                totalPaginas={totalPaginas}
+                onCambioPagina={handleCambioPagina}
+              />
+            </>
+          )}
+        </div>
       </div>
     </section>
   );

@@ -12,6 +12,12 @@ export interface CabeceraTablaProps {
   setFiltro: Dispatch<SetStateAction<string>>;
 }
 
+export interface FiltrosTablaProps {
+  filtros: { label: string; value: string }[];
+  filtro: string;
+  setFiltro: Dispatch<SetStateAction<string>>;
+}
+
 export interface TablaPresupuestosProps {
   presupuestos: Presupuesto[];
   formatearFecha: (fecha: string) => string;

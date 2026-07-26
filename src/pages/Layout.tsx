@@ -6,17 +6,17 @@ import { Sidebar } from "../components/layout/Sidebar";
 
 export const Layout = () => {
   return (
-    <div className="flex min-h-screen max-h-screen">
+    <div className="flex h-screen overflow-hidden">
       <ScrollToTop />
       <div className="w-70.5 shrink-0">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 overflow-hidden">
         <Navbar />
         <div className="flex-1 overflow-auto">
           <Outlet />
-          <Footer />
         </div>
+        <Footer />
       </div>
     </div>
   );
