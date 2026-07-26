@@ -39,7 +39,7 @@ export const Presupuestos = () => {
       <div className="border border-gray-300 rounded-lg overflow-hidden mt-5 shadow-md">
         <div className="min-h-112 bg-white flex flex-col justify-between">
           {loading ? (
-            <SkeletonTabla />
+            <SkeletonTabla showPagination={true} />
           ) : (
             <>
               <TablaPresupuestos

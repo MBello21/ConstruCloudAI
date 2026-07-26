@@ -1,6 +1,5 @@
 import CabeceraTabla from "../components/Panel/CabeceraTabla";
 import TablaPresupuestos from "../components/Panel/TablaPresupuestos";
-import PaginacionTabla from "../components/Panel/PaginacionTabla";
 import { SkeletonTabla } from "../components/Panel/SkeletonTabla";
 import { formatearFecha, formatearPrecio } from "../helpers";
 import { SectionHeader } from "../components/ui/SectionHeader";
@@ -8,16 +7,8 @@ import { usePanel } from "../hooks/usePanel";
 import { useLocation } from "react-router";
 
 export const Panel = () => {
-  const {
-    presupuestos,
-    filtro,
-    setFiltro,
-    loading,
-    presupuestosFiltrados,
-    totalPaginas,
-    pagina,
-    handleCambioPagina,
-  } = usePanel();
+  const { presupuestos, filtro, setFiltro, loading, presupuestosFiltrados } =
+    usePanel();
   const { pathname } = useLocation();
   return (
     <section className="p-3 px-5 min-h-full bg-gray-100">
@@ -35,20 +26,13 @@ export const Panel = () => {
         />
         <div className="min-h-112 bg-white flex flex-col justify-between">
           {loading ? (
-            <SkeletonTabla />
+            <SkeletonTabla showPagination={false} />
           ) : (
-            <>
-              <TablaPresupuestos
-                presupuestos={presupuestosFiltrados}
-                formatearFecha={formatearFecha}
-                formatearPrecio={formatearPrecio}
-              />
-              <PaginacionTabla
-                pagina={pagina}
-                totalPaginas={totalPaginas}
-                onCambioPagina={handleCambioPagina}
-              />
-            </>
+            <TablaPresupuestos
+              presupuestos={presupuestosFiltrados}
+              formatearFecha={formatearFecha}
+              formatearPrecio={formatearPrecio}
+            />
           )}
         </div>
       </div>
