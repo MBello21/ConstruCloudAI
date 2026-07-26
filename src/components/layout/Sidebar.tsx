@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-import { NAVEGATION } from "../../mock/sidebar-mock-data";
+import { NAVEGATION } from "../../constants/sidebar-data.constant";
 import { HardHat } from "lucide-react";
 export const Sidebar = () => {
   return (

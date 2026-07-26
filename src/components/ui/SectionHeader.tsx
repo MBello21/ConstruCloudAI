@@ -3,15 +3,12 @@ import type { SectionHeaderConfig } from "../../types";
 import { Button } from "./Button";
 import { Plus } from "lucide-react";
 
-interface SectionHeaderProps extends SectionHeaderConfig {
-  onNuevoPresupuesto?: () => void;
-}
-
 export const SectionHeader = ({
   title,
   section,
   subtitle,
-}: SectionHeaderProps) => {
+  pathname,
+}: SectionHeaderConfig) => {
   return (
     <div className="flex w-full justify-between">
       <div className="w-[80%]">
@@ -22,12 +19,14 @@ export const SectionHeader = ({
         <p className="text-neutral-400">{subtitle}</p>
       </div>
       <div className="flex justify-end items-end min-h-full w-[20%]">
-        <Link to="/nuevo-presupuesto">
-          <Button variant="primary">
-            <Plus size={18} />
-            Nuevo presupuesto
-          </Button>
-        </Link>
+        {pathname === "/" && (
+          <Link to="/nuevo-presupuesto">
+            <Button variant="primary">
+              <Plus size={18} />
+              Nuevo presupuesto
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );
