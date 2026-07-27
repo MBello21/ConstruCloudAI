@@ -12,10 +12,20 @@ export interface CabeceraTablaProps {
   setFiltro: Dispatch<SetStateAction<string>>;
 }
 
+export interface FiltrosTablaProps {
+  filtros: { label: string; value: string }[];
+  filtro: string;
+  setFiltro: Dispatch<SetStateAction<string>>;
+}
+
 export interface TablaPresupuestosProps {
   presupuestos: Presupuesto[];
   formatearFecha: (fecha: string) => string;
   formatearPrecio: (importe: number) => string;
+}
+
+export interface SckeletonTablaProps {
+  showPagination: boolean;
 }
 
 export interface PaginacionTablaProps {
@@ -32,6 +42,7 @@ export interface SectionHeaderConfig {
   title: string;
   section?: string;
   subtitle?: string;
+  pathname: string;
 }
 
 export interface FormularioGeneracionProps {
