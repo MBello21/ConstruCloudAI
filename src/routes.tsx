@@ -17,6 +17,7 @@ export const router = createBrowserRouter(
         <Route path="/presupuestos" element={<Presupuestos />} />
         <Route path="/nuevo-presupuesto" element={<GenerarPresupuesto />} />
       </Route>
+      <Route path="/presupuesto/:id" element={<DetallePresupuesto />} />
     </>,
   ),
 );
