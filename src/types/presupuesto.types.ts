@@ -35,3 +35,14 @@ export interface PresupuestoDetalle {
   capitulos: Capitulo[];
   created_at?: string;
 }
+
+export interface MetricasResponse {
+  total: number;
+  aprobados: number;
+  pendientes: number;
+  tasa_aprobacion: number;
+  importe_total: number;
+  variacion_total: number;
+  variacion_aprobados: number;
+  variacion_importe: number;
+}

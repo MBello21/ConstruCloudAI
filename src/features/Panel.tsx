@@ -5,6 +5,7 @@ import { formatearFecha, formatearPrecio } from "../helpers";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { usePanel } from "../hooks/usePanel";
 import { useLocation } from "react-router";
+import MetricasPanel from "../components/Panel/MetricasPanel";
 
 export const Panel = () => {
   const { presupuestos, filtro, setFiltro, loading, presupuestosFiltrados } =
@@ -18,6 +19,9 @@ export const Panel = () => {
         subtitle="Resumen de actividad · Julio 2026"
         pathname={pathname}
       />
+      <div className="mt-5">
+        <MetricasPanel />
+      </div>
       <div className="border border-gray-300 rounded-lg overflow-hidden mt-5 shadow-md">
         <CabeceraTabla
           totalRegistros={presupuestos.length}

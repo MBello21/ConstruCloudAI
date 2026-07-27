@@ -1,0 +1,11 @@
+import type { MetricasResponse } from "../../types";
+import { construcloudAPI } from "../api/construcloud.api";
+
+export const getMetricas = async (): Promise<MetricasResponse> => {
+  try {
+    const response = await construcloudAPI.get<MetricasResponse>("/metricas");
+    return response.data;
+  } catch (error) {
+    throw new Error("Error al obtener métricas", { cause: error });
+  }
+};

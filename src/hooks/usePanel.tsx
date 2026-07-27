@@ -19,7 +19,7 @@ export const usePanel = () => {
       } catch (_error) {
         toast.error("No se pudo conectar con el servidor. Inténtalo de nuevo.");
       } finally {
-        setLoading(false);
+        setTimeout(() => setLoading(false), 500);
       }
     };
     fetchData();
