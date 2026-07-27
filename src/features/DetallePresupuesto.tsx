@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CabeceraDetalle from "../components/presupuestos/CabeceraDetalle";
 import InfoGeneral from "../components/presupuestos/InfoGeneral";
 import SeccionCapitulosDetalle from "../components/presupuestos/SeccionCapitulosDetalle";
