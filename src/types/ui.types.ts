@@ -70,3 +70,11 @@ export interface SeccionCapitulosProps {
     cambios: Partial<Detalle>,
   ) => void;
 }
+
+export interface MetricCardProps {
+  titulo: string;
+  valor: string | number;
+  subtitulo: string;
+  variacion?: number;
+  destacado?: boolean;
+}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { PresupuestoElement } from "../types";
-import { getPresupuestos } from "../services/actions/get-presupuestos.action";
+import { getPresupuestos } from "../services/actions/presupuestos/get-presupuestos.action";
 
 export const usePanel = () => {
   const [filtro, setFiltro] = useState<string>("Todos");
@@ -19,7 +19,7 @@ export const usePanel = () => {
       } catch (_error) {
         toast.error("No se pudo conectar con el servidor. Inténtalo de nuevo.");
       } finally {
-        setLoading(false);
+        setTimeout(() => setLoading(false), 500);
       }
     };
     fetchData();

@@ -4,8 +4,8 @@ import InfoGeneral from "../components/presupuestos/InfoGeneral";
 import SeccionCapitulosDetalle from "../components/presupuestos/SeccionCapitulosDetalle";
 import ResumenEconomico from "../components/presupuestos/ResumenEconomico";
 import type { PresupuestoDetalle, Capitulo } from "../types";
-import { getPresupuestosByID } from "../services/actions/get-presupuest.by-id.action";
-import { useParams } from "react-router";
+import { getPresupuestosByID } from "../services/actions/presupuestos/get-presupuest.by-id.action";
+import { useNavigate, useParams } from "react-router";
 
 export const DetallePresupuesto = () => {
   const { id } = useParams();
@@ -14,6 +14,8 @@ export const DetallePresupuesto = () => {
   );
 
   const [capitulos, setCapitulos] = useState<Capitulo[]>([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +27,7 @@ export const DetallePresupuesto = () => {
   }, [id]);
 
   const handleVolver = () => {
-    window.history.back();
+    navigate(-1);
   };
 
   const handleEliminar = () => {

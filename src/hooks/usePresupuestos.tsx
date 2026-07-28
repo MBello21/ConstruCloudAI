@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { PresupuestoElement } from "../types";
-import { getPresupuestos } from "../services/actions/get-presupuestos.action";
+import { getPresupuestos } from "../services/actions/presupuestos/get-presupuestos.action";
 
 const ITEMS_POR_PAGINA = 7;
 

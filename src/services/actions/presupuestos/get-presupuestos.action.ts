@@ -1,5 +1,5 @@
-import type { PresupuestoReponse } from "../../types";
-import { construcloudAPI } from "../api/construcloud.api";
+import type { PresupuestoReponse } from "../../../types";
+import { construcloudAPI } from "../../api/construcloud.api";
 
 export const getPresupuestos = async (
   skip: number,

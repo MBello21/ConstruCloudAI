@@ -13,7 +13,7 @@ const CabeceraTabla: React.FC<CabeceraTablaProps> = ({
       <div>
         <h2 className="font-semibold">Presupuestos recientes</h2>
         <p className="text-sm text-gray-500">
-          {totalRegistros} registros · ordenados por fecha
+          {totalRegistros} ultimos registros · ordenados por fecha
         </p>
       </div>
       <FiltrosTabla
