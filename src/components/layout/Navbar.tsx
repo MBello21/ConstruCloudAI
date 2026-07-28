@@ -1,18 +1,20 @@
 import { Link, useLocation } from "react-router";
 import { Button } from "../ui/Button";
 import { Plus } from "lucide-react";
+import { BOTONES_POR_RUTA } from "../../constants/navbar-button-data.constant";
 
 export const Navbar = () => {
   const { pathname } = useLocation();
+  const boton = BOTONES_POR_RUTA.find((b) => b.path === pathname);
   return (
     <nav className="h-16 flex justify-between items-center px-6 border-b border-gray-300 bg-white">
       <div className="flex items-center gap-3 border-gray-300 h-full w-full justify-end">
         <div className="flex justify-center items-center gap-3 border-l border-gray-300 w-50 ">
-          {pathname === "/presupuestos" ? (
-            <Link to="/nuevo-presupuesto">
+          {boton ? (
+            <Link to={boton.to}>
               <Button variant="primary">
                 <Plus size={18} />
-                Nuevo presupuesto
+                {boton.label}
               </Button>
             </Link>
           ) : (

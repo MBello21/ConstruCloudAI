@@ -35,12 +35,15 @@ const TablaPresupuestos: React.FC<TablaPresupuestosProps> = ({
                 {item.codigo}
               </Link>
             </td>
-            <td className="px-3 py-5 text-sm">
+            <td className="px-3 py-5 text-xs">
               <Link
-                className="cursor-pointer text-neutral-800 font-semibold  hover:text-blue-900 "
+                className="cursor-pointer text-neutral-800 hover:text-blue-900 flex flex-col "
                 to={`/presupuesto/${item.id}`}
               >
-                {item.titulo}
+                <span className="mb-1 font-semibold text-sm">
+                  {item.titulo}
+                </span>
+                {item.nombre_cliente}
               </Link>
             </td>
             <td className="px-3 py-5 text-sm font-medium">

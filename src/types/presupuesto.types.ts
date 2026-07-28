@@ -8,6 +8,7 @@ export interface PresupuestoReponse {
 export interface PresupuestoElement {
   id: number;
   codigo: string;
+  nombre_cliente?: string;
   titulo: string;
   total: number;
   estado: Estado;
