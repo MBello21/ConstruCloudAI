@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MetricCard from "./MetricCard";
-import { getMetricas } from "../../services/actions/get-metricas.action";
+import { getMetricas } from "../../services/actions/presupuestos/get-metricas.action";
 import { formatearPrecio } from "../../helpers/formato.helpers";
 import type { MetricasResponse } from "../../types";
 
@@ -18,7 +18,7 @@ const MetricasPanel: React.FC = () => {
         setError(null);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Error al cargar métricas"
+          err instanceof Error ? err.message : "Error al cargar métricas",
         );
       } finally {
         setLoading(false);

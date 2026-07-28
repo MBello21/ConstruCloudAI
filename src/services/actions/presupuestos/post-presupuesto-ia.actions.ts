@@ -1,4 +1,4 @@
-import { construcloudAPI } from "../api/construcloud.api";
+import { construcloudAPI } from "../../api/construcloud.api";
 
 export interface PresupuestoIARequest {
   titulo: string;
@@ -8,7 +8,7 @@ export interface PresupuestoIARequest {
 
 export const postPresupuesto = async (data: PresupuestoIARequest) => {
   try {
-    const response = await construcloudAPI.post("/presupuesto/ia-rag", data);
+    const response = await construcloudAPI.post("/presupuestos/ia-rag", data);
     return response.data;
   } catch (error) {
     throw new Error(`Error obteniendo presupuestos`, { cause: error });

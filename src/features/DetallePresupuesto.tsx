@@ -4,7 +4,7 @@ import InfoGeneral from "../components/presupuestos/InfoGeneral";
 import SeccionCapitulosDetalle from "../components/presupuestos/SeccionCapitulosDetalle";
 import ResumenEconomico from "../components/presupuestos/ResumenEconomico";
 import type { PresupuestoDetalle, Capitulo } from "../types";
-import { getPresupuestosByID } from "../services/actions/get-presupuest.by-id.action";
+import { getPresupuestosByID } from "../services/actions/presupuestos/get-presupuest.by-id.action";
 import { useNavigate, useParams } from "react-router";
 
 export const DetallePresupuesto = () => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { postPresupuesto } from "../services/actions/post-presupuesto-ia.actions";
-import { getPresupuestosByID } from "../services/actions/get-presupuest.by-id.action";
+import { postPresupuesto } from "../services/actions/presupuestos/post-presupuesto-ia.actions";
+import { getPresupuestosByID } from "../services/actions/presupuestos/get-presupuest.by-id.action";
 import type { Capitulo, Detalle, PresupuestoDetalle } from "../types";
 
 export const useGenerarPresupuesto = () => {
