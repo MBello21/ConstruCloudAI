@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CabeceraDetalle from "../components/presupuestos/CabeceraDetalle";
 import InfoGeneral from "../components/presupuestos/InfoGeneral";
 import SeccionCapitulosDetalle from "../components/presupuestos/SeccionCapitulosDetalle";
 import ResumenEconomico from "../components/presupuestos/ResumenEconomico";
-import type { PresupuestoDetalle, Capitulo } from "../types";
+import { type PresupuestoDetalle, type Capitulo } from "../types";
 import { getPresupuestosByID } from "../services/actions/presupuestos/get-presupuest.by-id.action";
 import { useNavigate, useParams } from "react-router";
 
 export const DetallePresupuesto = () => {
   const { id } = useParams();
   const [presupuesto, setPresupuesto] = useState<PresupuestoDetalle | null>(
+    null,
+  );
+  const [originalData, setOriginalData] = useState<PresupuestoDetalle | null>(
     null,
   );
 
@@ -22,9 +25,20 @@ export const DetallePresupuesto = () => {
       const data = await getPresupuestosByID(Number(id));
       setPresupuesto(data);
       setCapitulos(data.capitulos || []);
+      setOriginalData(structuredClone(data));
     };
     fetchData();
   }, [id]);
+
+  const isDirty = useMemo(() => {
+    if (!presupuesto || !originalData) return false;
+    const current = { ...presupuesto, capitulos };
+    const original = {
+      ...originalData,
+      capitulos: originalData.capitulos || [],
+    };
+    return JSON.stringify(current) !== JSON.stringify(original);
+  }, [presupuesto, capitulos, originalData]);
 
   const handleVolver = () => {
     navigate(-1);
@@ -198,6 +212,12 @@ export const DetallePresupuesto = () => {
           subtotal={presupuesto.subtotal}
           iva={presupuesto.iva}
         />
+        {isDirty && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4 flex justify-end gap-3 z-50">
+            <button className="bg-blue-900">Descartar cambios</button>
+            <button className="...">Guardar cambios</button>
+          </div>
+        )}
       </div>
     </section>
   );
