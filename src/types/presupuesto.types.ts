@@ -47,3 +47,21 @@ export interface MetricasResponse {
   variacion_aprobados: number;
   variacion_importe: number;
 }
+
+export interface PutPresupuestoRequest {
+  titulo?: string;
+  descripcion?: string;
+  estado?: string;
+  cliente_id?: number;
+}
+
+export interface PutPresupuestoResponse {
+  id: number;
+  titulo: string;
+  actualizado: boolean;
+}
+
+export interface DeletePresupuestoResponse {
+  id: number;
+  eliminado: boolean;
+}
