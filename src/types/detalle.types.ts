@@ -1,13 +1,34 @@
 export interface Detalle {
-  id: number | string;
-  numero?: number;
+  id: number;
+  capitulo_id: number;
+  numero: number;
   descripcion: string;
-  cantidad: number;
   unidad: string;
+  cantidad: number;
   precio_unitario: number;
   subtotal: number;
   generado_por_ia?: boolean;
 }
+
+export interface DetalleCreate {
+  capitulo_id: number;
+  numero: number;
+  descripcion: string;
+  unidad: string;
+  cantidad: number;
+  precio_unitario: number;
+  subtotal?: number;
+}
+
+export interface DetalleUpdate {
+  descripcion?: string;
+  unidad?: string;
+  cantidad?: number;
+  precio_unitario?: number;
+}
+
+export type DetalleResponse = Detalle[];
+export type GetDetalleResponse = Detalle;
 
 export const Unidad = {
   M: "m",
