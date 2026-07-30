@@ -1,4 +1,4 @@
-# ConstruCloudAI Fronten
+# ConstruCloudAI Frontend
 
 Frontend de ConstruCloudAI — plataforma de generación de presupuestos de construcción asistidos por IA.
 
