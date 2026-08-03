@@ -6,11 +6,24 @@ import { SectionHeader } from "../components/ui/SectionHeader";
 import { usePanel } from "../hooks/usePanel";
 import { useLocation } from "react-router";
 import MetricasPanel from "../components/Panel/MetricasPanel";
+import useGlobalReducer from "../context/store-context/useGlobalReducer";
+import ModalEditarPresupuesto from "../components/presupuestos/ModalEditarPresupuesto";
 
 export const Panel = () => {
-  const { presupuestos, filtro, setFiltro, loading, presupuestosFiltrados } =
-    usePanel();
+  const {
+    presupuestos,
+    filtro,
+    setFiltro,
+    loading,
+    isOpen,
+    setIsOpen,
+    presupuestoSeleccionado,
+    handleEditar,
+    handleGuardar,
+  } = usePanel();
   const { pathname } = useLocation();
+  const { store } = useGlobalReducer();
+
   return (
     <section className="p-3 px-5 min-h-full bg-gray-100">
       <SectionHeader
@@ -33,13 +46,24 @@ export const Panel = () => {
             <SkeletonTabla showPagination={false} />
           ) : (
             <TablaPresupuestos
-              presupuestos={presupuestosFiltrados}
+              presupuestos={presupuestos}
               formatearFecha={formatearFecha}
               formatearPrecio={formatearPrecio}
+              onEditar={handleEditar}
             />
           )}
         </div>
       </div>
+      {isOpen && presupuestoSeleccionado && (
+        <ModalEditarPresupuesto
+          key={presupuestoSeleccionado.id}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onGuardar={handleGuardar}
+          presupuesto={presupuestoSeleccionado}
+          clientes={store.clientes}
+        />
+      )}
     </section>
   );
 };

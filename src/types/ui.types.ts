@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { Presupuesto } from "./presupuesto.types";
+import type { Presupuesto, PresupuestoElement } from "./presupuesto.types";
 import type { Capitulo, Detalle } from "./capitulo.types";
 
 export interface BadgeEstadoProps {
@@ -15,13 +15,14 @@ export interface CabeceraTablaProps {
 export interface FiltrosTablaProps {
   filtros: { label: string; value: string }[];
   filtro: string;
-  setFiltro: Dispatch<SetStateAction<string>>;
+  handleFiltro: (f: string) => void;
 }
 
 export interface TablaPresupuestosProps {
   presupuestos: Presupuesto[];
   formatearFecha: (fecha: string) => string;
   formatearPrecio: (importe: number) => string;
+  onEditar: (presupuesto: PresupuestoElement) => void;
 }
 
 export interface SckeletonTablaProps {

@@ -1,23 +1,22 @@
+import type { ClientesResponse } from "../types";
+
 interface Store {
-  msg: string;
+  clientes: ClientesResponse[];
 }
 
-interface Action {
-  type: string;
-  payload?: unknown;
-}
+type Action = { type: "set_clientes"; payload: ClientesResponse[] };
 export const initialStore = () => {
   return {
-    msg: "Hola",
+    clientes: [],
   };
 };
 
 export const storeReducer = (store: Store, action: Action): Store => {
   switch (action.type) {
-    case "set_msg":
+    case "set_clientes":
       return {
         ...store,
-        msg: action.payload as string,
+        clientes: action.payload,
       };
     default:
       throw Error("Unknow action.");

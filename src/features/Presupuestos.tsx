@@ -6,21 +6,29 @@ import { FILTROS_ESTADO_PRESUPUESTOS } from "../helpers/filtro.helpers";
 import { PaginacionTabla, TablaPresupuestos } from "../components/Panel";
 import { formatearFecha, formatearPrecio } from "../helpers";
 import { SkeletonTabla } from "../components/Panel/SkeletonTabla";
+import useGlobalReducer from "../context/store-context/useGlobalReducer";
+import ModalEditarPresupuesto from "../components/presupuestos/ModalEditarPresupuesto";
 
 export const Presupuestos = () => {
   const { pathname } = useLocation();
   const {
     filtro,
-    setFiltro,
+    presupuestos,
+    isOpen,
+    setIsOpen,
+    presupuestoSeleccionado,
     loading,
     pagina,
     totalPaginas,
     totalRegistros,
     ITEMS_POR_PAGINA,
-    presupuestosFiltrados,
     handleCambioPagina,
+    handleEditar,
+    handleGuardar,
+    handleFiltro,
   } = usePresupuestos();
 
+  const { store } = useGlobalReducer();
   return (
     <section className="p-3 px-5 min-h-full bg-gray-100">
       <SectionHeader
@@ -33,7 +41,7 @@ export const Presupuestos = () => {
         <FiltrosTabla
           filtros={FILTROS_ESTADO_PRESUPUESTOS}
           filtro={filtro}
-          setFiltro={setFiltro}
+          handleFiltro={handleFiltro}
         />
       </div>
       <div className="border border-gray-300 rounded-lg overflow-hidden mt-5 shadow-md">
@@ -43,9 +51,10 @@ export const Presupuestos = () => {
           ) : (
             <>
               <TablaPresupuestos
-                presupuestos={presupuestosFiltrados}
+                presupuestos={presupuestos}
                 formatearFecha={formatearFecha}
                 formatearPrecio={formatearPrecio}
+                onEditar={handleEditar}
               />
               <PaginacionTabla
                 pagina={pagina}
@@ -56,6 +65,16 @@ export const Presupuestos = () => {
           )}
         </div>
       </div>
+      {isOpen && presupuestoSeleccionado && (
+        <ModalEditarPresupuesto
+          key={presupuestoSeleccionado.id}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onGuardar={handleGuardar}
+          presupuesto={presupuestoSeleccionado}
+          clientes={store.clientes}
+        />
+      )}
     </section>
   );
 };

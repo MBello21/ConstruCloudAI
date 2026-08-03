@@ -2,6 +2,7 @@ import React from "react";
 import { SquareArrowOutUpRight, SquarePen, Trash2 } from "lucide-react";
 import BadgeEstado from "../ui/BadgeEstado";
 import type { Cliente } from "../../types/cliente.types";
+import { formatearPrecio } from "../../helpers";
 
 interface TablaClientesProps {
   clientes: Cliente[];
@@ -59,17 +60,19 @@ const TablaClientes: React.FC<TablaClientesProps> = ({ clientes }) => {
               {cliente.presupuestos?.length || 0}
             </td>
             <td className="px-3 py-5 text-sm font-medium text-neutral-800">
-              -
+              {formatearPrecio(
+                cliente.presupuestos?.reduce((sum, p) => sum + p.total, 0) || 0,
+              )}
             </td>
             <td className="px-3 py-5 text-sm">
               <BadgeEstado estado={cliente.estado || "Activo"} />
             </td>
             <td className="px-3 py-5 text-sm">
               <div className="flex gap-2">
-                <button className="hover:text-blue-600 transition-colors">
+                <button className="hover:text-blue-900 transition-colors">
                   <SquareArrowOutUpRight className="h-5 w-5" />
                 </button>
-                <button className="hover:text-blue-600 transition-colors">
+                <button className="hover:text-blue-900 transition-colors">
                   <SquarePen className="h-5 w-5" />
                 </button>
                 <button className="hover:text-red-600 transition-colors">
