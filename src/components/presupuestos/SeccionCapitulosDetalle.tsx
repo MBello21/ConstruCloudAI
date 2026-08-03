@@ -1,7 +1,7 @@
-import React, { useState } from "react";
 import { ChevronDown, ChevronRight, Plus, Trash2 } from "lucide-react";
 import { formatearPrecio } from "../../helpers";
 import type { Capitulo } from "../../types";
+import { useCapitulosDetalle } from "../../hooks/useCapitulosDetalle";
 
 interface SeccionCapitulosDetalleProps {
   capitulos: Capitulo[];
@@ -12,13 +12,13 @@ interface SeccionCapitulosDetalleProps {
   onAgregarDetalle: (capituloId: number | string) => void;
   onEliminarDetalle: (
     capituloId: number | string,
-    detalleId: number | string
+    detalleId: number | string,
   ) => void;
   onActualizarDetalle: (
     capituloId: number | string,
     detalleId: number | string,
     campo: string,
-    valor: string | number
+    valor: string | number,
   ) => void;
 }
 
@@ -32,56 +32,19 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
   onEliminarDetalle,
   onActualizarDetalle,
 }) => {
-  const [expandedCapitulos, setExpandedCapitulos] = useState<Set<number | string>>(
-    new Set()
+  const {
+    expandedCapitulos,
+    editingFields,
+    editValues,
+    toggleExpanded,
+    toggleEditField,
+    handleFieldChange,
+    handleFieldBlur,
+  } = useCapitulosDetalle(
+    onToggleCapitulo,
+    onActualizarNombreCapitulo,
+    onActualizarDetalle,
   );
-  const [editingFields, setEditingFields] = useState<{ [key: string]: boolean }>({});
-  const [editValues, setEditValues] = useState<{ [key: string]: string | number }>({});
-
-  const toggleExpanded = (id: number | string) => {
-    const newExpanded = new Set(expandedCapitulos);
-    if (newExpanded.has(id)) {
-      newExpanded.delete(id);
-    } else {
-      newExpanded.add(id);
-    }
-    setExpandedCapitulos(newExpanded);
-    onToggleCapitulo(id);
-  };
-
-  const toggleEditField = (fieldKey: string, initialValue?: string | number) => {
-    setEditingFields((prev) => {
-      const newState = { ...prev, [fieldKey]: !prev[fieldKey] };
-      if (newState[fieldKey] && initialValue !== undefined) {
-        setEditValues((prev) => ({ ...prev, [fieldKey]: initialValue }));
-      }
-      return newState;
-    });
-  };
-
-  const handleFieldChange = (fieldKey: string, value: string | number) => {
-    setEditValues((prev) => ({ ...prev, [fieldKey]: value }));
-  };
-
-  const handleFieldBlur = (
-    fieldKey: string,
-    capituloId: number | string,
-    detalleId: number | string | undefined,
-    campo: string,
-  ) => {
-    const value = editValues[fieldKey];
-    if (value !== undefined) {
-      if (detalleId !== undefined) {
-        const parsedValue = campo === "descripcion" || campo === "unidad"
-          ? value
-          : parseFloat(String(value));
-        onActualizarDetalle(capituloId, detalleId, campo, parsedValue);
-      } else {
-        onActualizarNombreCapitulo(capituloId, String(value));
-      }
-    }
-    toggleEditField(fieldKey);
-  };
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
@@ -116,19 +79,22 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                     type="text"
                     value={editValues[`capitulo-${capitulo.id}`] || ""}
                     onChange={(e) =>
-                      handleFieldChange(`capitulo-${capitulo.id}`, e.target.value)
+                      handleFieldChange(
+                        `capitulo-${capitulo.id}`,
+                        e.target.value,
+                      )
                     }
                     onBlur={() =>
                       handleFieldBlur(
                         `capitulo-${capitulo.id}`,
                         capitulo.id,
                         undefined,
-                        "nombre"
+                        "nombre",
                       )
                     }
                     onClick={(e) => e.stopPropagation()}
                     autoFocus
-                    className="font-medium text-gray-900 px-2 py-1 border border-blue-950 rounded focus:outline-none focus:ring-2 focus:ring-blue-950"
+                    className="font-medium text-gray-900 px-2 py-1 w-full border border-blue-950 rounded focus:outline-none focus:ring-2 focus:ring-blue-950 me-1"
                   />
                 ) : (
                   <span
@@ -137,7 +103,7 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                       e.stopPropagation();
                       toggleEditField(
                         `capitulo-${capitulo.id}`,
-                        capitulo.nombre
+                        capitulo.nombre,
                       );
                     }}
                   >
@@ -189,13 +155,14 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                         >
                           <td className="py-3 px-2 text-gray-900">
                             {editingFields[`detalle-${detalle.id}-desc`] ? (
-                              <input
-                                type="text"
-                                value={editValues[`detalle-${detalle.id}-desc`] || ""}
+                              <textarea
+                                value={
+                                  editValues[`detalle-${detalle.id}-desc`] || ""
+                                }
                                 onChange={(e) =>
                                   handleFieldChange(
                                     `detalle-${detalle.id}-desc`,
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                                 onBlur={() =>
@@ -203,7 +170,7 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                                     `detalle-${detalle.id}-desc`,
                                     capitulo.id,
                                     detalle.id,
-                                    "descripcion"
+                                    "descripcion",
                                   )
                                 }
                                 autoFocus
@@ -214,7 +181,7 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                                 onClick={() =>
                                   toggleEditField(
                                     `detalle-${detalle.id}-desc`,
-                                    detalle.descripcion
+                                    detalle.descripcion,
                                   )
                                 }
                                 className="cursor-pointer hover:text-blue-950 transition-colors"
@@ -226,11 +193,13 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                           <td className="py-3 px-2 text-center text-gray-700">
                             {editingFields[`detalle-${detalle.id}-unit`] ? (
                               <select
-                                value={editValues[`detalle-${detalle.id}-unit`] || ""}
+                                value={
+                                  editValues[`detalle-${detalle.id}-unit`] || ""
+                                }
                                 onChange={(e) =>
                                   handleFieldChange(
                                     `detalle-${detalle.id}-unit`,
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                                 onBlur={() =>
@@ -238,7 +207,7 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                                     `detalle-${detalle.id}-unit`,
                                     capitulo.id,
                                     detalle.id,
-                                    "unidad"
+                                    "unidad",
                                   )
                                 }
                                 autoFocus
@@ -255,7 +224,7 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                                 onClick={() =>
                                   toggleEditField(
                                     `detalle-${detalle.id}-unit`,
-                                    detalle.unidad
+                                    detalle.unidad,
                                   )
                                 }
                                 className="cursor-pointer hover:text-blue-950 transition-colors"
@@ -268,11 +237,13 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                             {editingFields[`detalle-${detalle.id}-qty`] ? (
                               <input
                                 type="number"
-                                value={editValues[`detalle-${detalle.id}-qty`] || ""}
+                                value={
+                                  editValues[`detalle-${detalle.id}-qty`] || ""
+                                }
                                 onChange={(e) =>
                                   handleFieldChange(
                                     `detalle-${detalle.id}-qty`,
-                                    parseFloat(e.target.value) || 0
+                                    parseFloat(e.target.value) || 0,
                                   )
                                 }
                                 onBlur={() =>
@@ -280,7 +251,7 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                                     `detalle-${detalle.id}-qty`,
                                     capitulo.id,
                                     detalle.id,
-                                    "cantidad"
+                                    "cantidad",
                                   )
                                 }
                                 autoFocus
@@ -291,7 +262,7 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                                 onClick={() =>
                                   toggleEditField(
                                     `detalle-${detalle.id}-qty`,
-                                    detalle.cantidad
+                                    detalle.cantidad,
                                   )
                                 }
                                 className="cursor-pointer hover:text-blue-950 transition-colors"
@@ -304,11 +275,14 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                             {editingFields[`detalle-${detalle.id}-price`] ? (
                               <input
                                 type="number"
-                                value={editValues[`detalle-${detalle.id}-price`] || ""}
+                                value={
+                                  editValues[`detalle-${detalle.id}-price`] ||
+                                  ""
+                                }
                                 onChange={(e) =>
                                   handleFieldChange(
                                     `detalle-${detalle.id}-price`,
-                                    parseFloat(e.target.value) || 0
+                                    parseFloat(e.target.value) || 0,
                                   )
                                 }
                                 onBlur={() =>
@@ -316,7 +290,7 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                                     `detalle-${detalle.id}-price`,
                                     capitulo.id,
                                     detalle.id,
-                                    "precio_unitario"
+                                    "precio_unitario",
                                   )
                                 }
                                 autoFocus
@@ -327,7 +301,7 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
                                 onClick={() =>
                                   toggleEditField(
                                     `detalle-${detalle.id}-price`,
-                                    detalle.precio_unitario
+                                    detalle.precio_unitario,
                                   )
                                 }
                                 className="cursor-pointer hover:text-blue-950 transition-colors"

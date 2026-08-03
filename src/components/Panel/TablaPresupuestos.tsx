@@ -8,6 +8,7 @@ const TablaPresupuestos: React.FC<TablaPresupuestosProps> = ({
   presupuestos,
   formatearFecha,
   formatearPrecio,
+  onEditar,
 }) => {
   return (
     <table className="w-full border-collapse bg-gray-100">
@@ -58,7 +59,9 @@ const TablaPresupuestos: React.FC<TablaPresupuestosProps> = ({
             <td className="px-3 py-5 text-sm">
               <div className="flex gap-2">
                 <SquareArrowOutUpRight className="h-5 w-5" />
-                <SquarePen className="h-5 w-5" />
+                <button onClick={() => onEditar(item)}>
+                  <SquarePen className="h-5 w-5" />
+                </button>
               </div>
             </td>
           </tr>

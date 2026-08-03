@@ -8,6 +8,7 @@ export interface Capitulo {
   numero: number;
   nombre: string;
   orden: number;
+  detalles: Detalle[];
 }
 
 export interface CreateCapituloRequest {

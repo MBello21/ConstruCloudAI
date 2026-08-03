@@ -18,7 +18,7 @@ const PaginacionTabla: React.FC<PaginacionTablaProps> = ({
       onCambioPagina(pagina + 1);
     }
   };
-
+  console.log("pagina:", pagina, "totalPaginas:", totalPaginas);
   return (
     <div className="flex justify-between items-center p-4 bg-white border-t border-gray-300">
       <div className="text-sm text-gray-600">
@@ -35,7 +35,7 @@ const PaginacionTabla: React.FC<PaginacionTablaProps> = ({
         </button>
         <button
           onClick={handleSiguiente}
-          disabled={pagina === totalPaginas}
+          disabled={pagina >= totalPaginas}
           className="p-2 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           aria-label="Página siguiente"
         >

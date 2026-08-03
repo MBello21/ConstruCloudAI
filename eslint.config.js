@@ -18,12 +18,16 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+
     rules: {
+      "no-unused-vars": "off", // 👈 OBLIGATORIO: desactiva la regla base de JS
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
           argsIgnorePattern: "^_",
           varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_", // 👈 Para bloques catch (e.g. catch (_error))
+          destructuredArrayIgnorePattern: "^_",
         },
       ],
     },

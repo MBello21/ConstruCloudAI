@@ -10,7 +10,7 @@ export const putPresupuesto = async (
 ): Promise<PutPresupuestoResponse> => {
   try {
     const response = await construcloudAPI.put<PutPresupuestoResponse>(
-      `/presupuesto/${id}`,
+      `/presupuestos/${id}`,
       data,
     );
     return response.data;
