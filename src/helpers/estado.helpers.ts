@@ -31,4 +31,19 @@ export const ESTADO_CONFIG: Record<string, EstadoConfig> = {
     text: "text-purple-600",
     dot: "bg-purple-600",
   },
+  Activo: {
+    bg: "bg-green-100",
+    text: "text-green-800",
+    dot: "bg-green-600",
+  },
+  Potencial: {
+    bg: "bg-yellow-100",
+    text: "text-yellow-800",
+    dot: "bg-yellow-600",
+  },
+  Inactivo: {
+    bg: "bg-gray-100",
+    text: "text-gray-600",
+    dot: "bg-gray-600",
+  },
 };

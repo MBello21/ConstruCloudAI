@@ -12,6 +12,7 @@ export interface Cliente {
   poblacion: string;
   telefono: string;
   email?: string;
+  estado?: string;
   presupuestos: PresupuestoResumen[];
 }
 
