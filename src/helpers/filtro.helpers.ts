@@ -10,5 +10,12 @@ export const FILTROS_ESTADO_PANEL = [
   { label: "Todos", value: "Todos" },
   { label: "Aprobados", value: "Aprobado" },
   { label: "Pendientes", value: "Pendiente" },
-  { label: "Borradores", value: "Borrador" }, 
+  { label: "Borradores", value: "Borrador" },
+];
+
+export const FILTROS_ESTADO_CLIENTES = [
+  { label: "Todos", value: "Todos" },
+  { label: "Activos", value: "Activo" },
+  { label: "Potenciales", value: "Potencial" },
+  { label: "Inactivos", value: "Inactivo" },
 ];

@@ -10,6 +10,7 @@ import { GenerarPresupuesto } from "./features/GenerarPresupuesto";
 import { Presupuestos } from "./features/Presupuestos";
 import { DetallePresupuesto } from "./features/DetallePresupuesto";
 import { Clientes } from "./features/Clientes";
+import { ClienteDetalle } from "./features/ClienteDetalle";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ export const router = createBrowserRouter(
         <Route path="/clientes" element={<Clientes />} />
       </Route>
       <Route path="/presupuesto/:id" element={<DetallePresupuesto />} />
+      <Route path="/clientes/:id" element={<ClienteDetalle />} />
       <Route path="/nuevo-presupuesto" element={<GenerarPresupuesto />} />
     </>,
   ),
