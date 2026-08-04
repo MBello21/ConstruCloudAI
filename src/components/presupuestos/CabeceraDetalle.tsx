@@ -6,14 +6,14 @@ import type { PresupuestoDetalle } from "../../types";
 interface CabeceraDetalleProps {
   presupuesto: PresupuestoDetalle;
   onVolver: () => void;
-  onEliminar: () => void;
+  // onEliminar: () => void;
   onExportar: () => void;
 }
 
 const CabeceraDetalle: React.FC<CabeceraDetalleProps> = ({
   presupuesto,
   onVolver,
-  onEliminar,
+  // onEliminar,
   onExportar,
 }) => {
   return (
@@ -54,7 +54,7 @@ const CabeceraDetalle: React.FC<CabeceraDetalleProps> = ({
               Exportar PDF
             </button>
             <button
-              onClick={onEliminar}
+              // onClick={onEliminar}
               className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-300 rounded-md font-medium text-sm text-red-700 hover:bg-red-100 focus:outline-none transition-colors duration-200"
             >
               <Trash2 className="w-4 h-4" />

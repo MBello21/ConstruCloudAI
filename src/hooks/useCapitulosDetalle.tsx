@@ -2,7 +2,6 @@
 import { useState } from "react";
 
 export const useCapitulosDetalle = (
-  onToggleCapitulo: (id: number | string) => void,
   onActualizarNombreCapitulo: (id: number | string, nombre: string) => void,
   onActualizarDetalle: (
     capituloId: number | string,
@@ -31,7 +30,6 @@ export const useCapitulosDetalle = (
       }
       return next;
     });
-    onToggleCapitulo(id);
   };
 
   const toggleEditField = (

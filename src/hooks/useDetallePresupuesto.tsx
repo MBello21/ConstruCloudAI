@@ -1,171 +1,107 @@
-import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { usePresupuestoData } from "./usePresupuestoData";
+import { useCapitulosManager } from "./useCapitulosManager";
+import { usePresupuestoGuardar } from "./usePresupuestoGuardar";
+import { deleteCapitulo } from "../services/actions/capitulos/delete-capitulo.action";
+import { toast } from "sonner";
 import { getPresupuestosByID } from "../services/actions/presupuestos/get-presupuest.by-id.action";
-import type { Capitulo, PresupuestoDetalle } from "../types";
 
 export const useDetallePresupuesto = () => {
   const { id } = useParams();
-  const [presupuesto, setPresupuesto] = useState<PresupuestoDetalle | null>(
-    null,
-  );
-
-  const [capitulos, setCapitulos] = useState<Capitulo[]>([]);
-
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getPresupuestosByID(Number(id));
-      setPresupuesto(data);
-      setCapitulos(data.capitulos || []);
-    };
-    fetchData();
-  }, [id]);
+  const {
+    presupuesto,
+    setPresupuesto,
+    presupuestoSnapshot,
+    setPresupuestoSnapshot,
+    capitulos,
+    setCapitulos,
+    confirmDelete,
+    setConfirmDelete,
+    capitulosSnapshot,
+    setCapitulosSnapshot,
+    isDirty,
+    handleActualizarPresupuesto,
+  } = usePresupuestoData();
+
+  const {
+    handleAgregarCapitulo,
+    handleActualizarNombreCapitulo,
+    handleAgregarDetalle,
+    handleEliminarDetalle,
+    handleActualizarDetalle,
+    handleConfirmDeleteCapitulo,
+    handleConfirmDeleteDetalle,
+    capituloToDelete,
+    detalleToDelete,
+    setCapituloToDelete,
+    setDetalleToDelete,
+  } = useCapitulosManager({
+    capitulos,
+    setCapitulos,
+    presupuestoId: presupuesto?.id,
+  });
+
+  const { isSaving, handleGuardar, handleDescartar } = usePresupuestoGuardar({
+    presupuesto,
+    capitulos,
+    presupuestoSnapshot,
+    capitulosSnapshot,
+    presupuestoId: id,
+    setPresupuesto,
+    setPresupuestoSnapshot,
+    setCapitulos,
+    setCapitulosSnapshot,
+  });
 
   const handleVolver = () => {
     navigate(-1);
   };
 
-  const handleEliminar = () => {
-    if (!presupuesto) return;
-    if (
-      confirm(
-        "¿Estás seguro de que deseas eliminar este presupuesto? Esta acción no se puede deshacer.",
-      )
-    ) {
-      console.log("Eliminar presupuesto:", presupuesto.id);
+  const confirmarEliminacion = async () => {
+    if (!confirmDelete) return;
+
+    try {
+      if (confirmDelete.tipo === "capitulo") {
+        const esNuevo = !capitulosSnapshot.some(
+          (c) => c.id === confirmDelete.id,
+        );
+        if (!esNuevo) {
+          await deleteCapitulo(confirmDelete.id);
+          setCapitulosSnapshot((prev) =>
+            prev.filter((c) => c.id !== confirmDelete.id),
+          );
+          const data = await getPresupuestosByID(Number(id));
+          setPresupuesto(data);
+          setPresupuestoSnapshot(data);
+        }
+        setCapitulos((prev) => prev.filter((c) => c.id !== confirmDelete.id));
+      }
+      toast.success("Eliminado correctamente");
+    } catch (_error) {
+      toast.error("Error al eliminar");
+    } finally {
+      setConfirmDelete(null);
     }
+  };
+  const handleEliminarCapitulo = (id: number | string) => {
+    setConfirmDelete({ tipo: "capitulo", id });
   };
 
   const handleExportar = () => {
-    // TODO: Implementar exportación a PDF
     if (!presupuesto) return;
     console.log("Exportar presupuesto:", presupuesto.id);
   };
 
-  const handleActualizarPresupuesto = (
-    campo: string,
-    valor: string | number,
-  ) => {
-    if (!presupuesto) return;
-    setPresupuesto({
-      ...presupuesto,
-      [campo]: valor,
-    });
-    // TODO: Implementar API call para actualizar
-  };
-
-  const handleAgregarCapitulo = () => {
-    const nuevoCapitulo: Capitulo = {
-      id: Date.now(),
-      numero: capitulos.length + 1,
-      nombre: `Capítulo ${capitulos.length + 1}`,
-      abierto: true,
-      detalles: [],
-    };
-    setCapitulos((prev) => [...prev, nuevoCapitulo]);
-    // TODO: Implementar API call
-  };
-
-  const handleEliminarCapitulo = (id: number | string) => {
-    if (confirm("¿Deseas eliminar este capítulo?")) {
-      setCapitulos((prev) => prev.filter((c) => c.id !== id));
-      // TODO: Implementar API call
-    }
-  };
-
-  const handleToggleCapitulo = (id: number | string) => {
-    setCapitulos((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, abierto: !c.abierto } : c)),
-    );
-  };
-
-  const handleActualizarNombreCapitulo = (
-    id: number | string,
-    nombre: string,
-  ) => {
-    setCapitulos((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, nombre } : c)),
-    );
-  };
-
-  const handleAgregarDetalle = (capituloId: number | string) => {
-    setCapitulos((prev) =>
-      prev.map((c) => {
-        if (c.id === capituloId) {
-          return {
-            ...c,
-            detalles: [
-              ...c.detalles,
-              {
-                id: Date.now(),
-                numero: c.detalles.length + 1,
-                descripcion: "Nueva línea",
-                cantidad: 1,
-                unidad: "ud",
-                precio_unitario: 0,
-                subtotal: 0,
-              },
-            ],
-          };
-        }
-        return c;
-      }),
-    );
-    // TODO: Implementar API call
-  };
-
-  const handleEliminarDetalle = (
-    capituloId: number | string,
-    detalleId: number | string,
-  ) => {
-    if (confirm("¿Deseas eliminar esta línea?")) {
-      setCapitulos((prev) =>
-        prev.map((c) => {
-          if (c.id === capituloId) {
-            return {
-              ...c,
-              detalles: c.detalles.filter((d) => d.id !== detalleId),
-            };
-          }
-          return c;
-        }),
-      );
-      // TODO: Implementar API call
-    }
-  };
-
-  const handleActualizarDetalle = (
-    capituloId: number | string,
-    detalleId: number | string,
-    campo: string,
-    valor: string | number,
-  ) => {
-    setCapitulos((prev) =>
-      prev.map((c) => {
-        if (c.id === capituloId) {
-          return {
-            ...c,
-            detalles: c.detalles.map((d) => {
-              if (d.id === detalleId) {
-                const updated = { ...d, [campo]: valor };
-                if (campo === "cantidad" || campo === "precio_unitario") {
-                  updated.subtotal = updated.cantidad * updated.precio_unitario;
-                }
-                return updated;
-              }
-              return d;
-            }),
-          };
-        }
-        return c;
-      }),
-    );
-  };
   return {
     presupuesto,
     capitulos,
     setPresupuesto,
+    confirmDelete,
+    setConfirmDelete,
+    isDirty,
+    isSaving,
     handleActualizarDetalle,
     handleActualizarNombreCapitulo,
     handleActualizarPresupuesto,
@@ -173,9 +109,16 @@ export const useDetallePresupuesto = () => {
     handleAgregarDetalle,
     handleEliminarCapitulo,
     handleEliminarDetalle,
-    handleToggleCapitulo,
-    handleEliminar,
+    confirmarEliminacion,
     handleExportar,
     handleVolver,
+    handleDescartar,
+    handleGuardar,
+    handleConfirmDeleteCapitulo,
+    handleConfirmDeleteDetalle,
+    capituloToDelete,
+    detalleToDelete,
+    setCapituloToDelete,
+    setDetalleToDelete,
   };
 };

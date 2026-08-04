@@ -21,6 +21,7 @@ export interface DetalleCreate {
 }
 
 export interface DetalleUpdate {
+  numero?: number;
   descripcion?: string;
   unidad?: string;
   cantidad?: number;
