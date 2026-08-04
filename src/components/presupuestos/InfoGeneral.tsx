@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import type { PresupuestoDetalle } from "../../types";
+import React, { useEffect, useMemo, useState } from "react";
+import type { Cliente, PresupuestoDetalle } from "../../types";
+import { getClientes } from "../../services/actions/clientes/get-clientes.action";
 
 interface InfoGeneralProps {
   presupuesto: PresupuestoDetalle;
@@ -16,9 +17,19 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
 }) => {
   const [editingFields, setEditingFields] = useState<EditingField>({});
   const [editValues, setEditValues] = useState<{ [key: string]: string }>({});
-  const [cliente, setCliente] = useState("Cliente Ejemplo");
-  const [validez, setValidez] = useState("30 días");
-  const [condiciones, setCondiciones] = useState("Contado");
+  const [clientes, setClientes] = useState<Cliente[]>([]);
+
+  useEffect(() => {
+    getClientes().then(setClientes);
+  }, []);
+  const clienteNombre = useMemo(() => {
+    if (!clientes || !presupuesto) return "Sin cliente";
+    const found = clientes.find(
+      (c: Cliente) =>
+        c.id === (presupuesto.cliente_id || presupuesto.cliente?.cliente_id),
+    );
+    return found?.nombre_cliente || "Sin cliente";
+  }, [clientes, presupuesto]);
 
   const toggleEdit = (field: string) => {
     setEditingFields((prev) => {
@@ -26,13 +37,27 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
         return { ...prev, [field]: false };
       } else {
         if (field === "cliente") {
-          setEditValues((prev) => ({ ...prev, [field]: cliente }));
+          setEditValues((prev) => ({
+            ...prev,
+            [field]: String(presupuesto.cliente?.cliente_id || "Sin cliente"),
+          }));
         } else if (field === "validez") {
-          setEditValues((prev) => ({ ...prev, [field]: validez }));
+          setEditValues((prev) => ({
+            ...prev,
+            [field]: String(presupuesto.validez_dias || 30),
+          }));
         } else if (field === "condiciones") {
-          setEditValues((prev) => ({ ...prev, [field]: condiciones }));
+          setEditValues((prev) => ({
+            ...prev,
+            [field]: presupuesto.condiciones_pago || "Contado",
+          }));
         } else {
-          setEditValues((prev) => ({ ...prev, [field]: String(presupuesto[field as keyof PresupuestoDetalle] || "") }));
+          setEditValues((prev) => ({
+            ...prev,
+            [field]: String(
+              presupuesto[field as keyof PresupuestoDetalle] || "",
+            ),
+          }));
         }
         return { ...prev, [field]: true };
       }
@@ -40,14 +65,15 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
   };
 
   const handleBlur = (field: string) => {
+    console.log("handleBlur:", field, "value:", editValues[field]);
     const value = editValues[field];
     if (value !== undefined) {
       if (field === "cliente") {
-        setCliente(value);
+        onActualizar("cliente_id", Number(value));
       } else if (field === "validez") {
-        setValidez(value);
+        onActualizar("validez_dias", Number(value));
       } else if (field === "condiciones") {
-        setCondiciones(value);
+        onActualizar("condiciones_pago", value);
       } else {
         onActualizar(field, field === "iva" ? parseFloat(value) : value);
       }
@@ -71,20 +97,32 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
             Cliente
           </label>
           {editingFields["cliente"] ? (
-            <input
-              type="text"
+            <select
               value={editValues["cliente"] || ""}
-              onChange={(e) => handleChange("cliente", e.target.value)}
-              onBlur={() => handleBlur("cliente")}
+              onChange={(e) => {
+                handleChange("cliente", e.target.value);
+                onActualizar("cliente_id", Number(e.target.value));
+                setEditingFields((prev) => ({ ...prev, cliente: false }));
+              }}
+              onBlur={() =>
+                setEditingFields((prev) => ({ ...prev, cliente: false }))
+              }
               autoFocus
               className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
-            />
+            >
+              <option value="">Seleccionar cliente</option>
+              {clientes.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.nombre_cliente}
+                </option>
+              ))}
+            </select>
           ) : (
             <p
               onClick={() => toggleEdit("cliente")}
               className="text-gray-900 cursor-pointer hover:text-blue-950 transition-colors"
             >
-              {cliente}
+              {clienteNombre}
             </p>
           )}
         </div>
@@ -132,7 +170,7 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
               onClick={() => toggleEdit("validez")}
               className="text-gray-900 cursor-pointer hover:text-blue-950 transition-colors"
             >
-              {validez}
+              {presupuesto.validez_dias ?? "30 días"}
             </p>
           )}
         </div>
@@ -155,7 +193,7 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
               onClick={() => toggleEdit("condiciones")}
               className="text-gray-900 cursor-pointer hover:text-blue-950 transition-colors"
             >
-              {condiciones}
+              {presupuesto.condiciones_pago ?? "Contado"}
             </p>
           )}
         </div>

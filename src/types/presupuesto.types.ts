@@ -26,7 +26,11 @@ export type Estado =
   | "Rechazado";
 export interface PresupuestoDetalle {
   id: number;
+  cliente_id?: number;
+  cliente?: { cliente_id: number; nombre_cliente: string };
   codigo: string;
+  validez_dias: number;
+  condiciones_pago: string;
   titulo: string;
   descripcion: string;
   estado: string;
@@ -53,6 +57,8 @@ export interface PutPresupuestoRequest {
   descripcion?: string;
   estado?: string;
   cliente_id?: number;
+  validez_dias?: number;
+  condiciones_pago?: string;
 }
 
 export interface PutPresupuestoResponse {

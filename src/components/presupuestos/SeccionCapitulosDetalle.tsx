@@ -7,7 +7,6 @@ interface SeccionCapitulosDetalleProps {
   capitulos: Capitulo[];
   onAgregarCapitulo: () => void;
   onEliminarCapitulo: (id: number | string) => void;
-  onToggleCapitulo: (id: number | string) => void;
   onActualizarNombreCapitulo: (id: number | string, nombre: string) => void;
   onAgregarDetalle: (capituloId: number | string) => void;
   onEliminarDetalle: (
@@ -26,7 +25,6 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
   capitulos,
   onAgregarCapitulo,
   onEliminarCapitulo,
-  onToggleCapitulo,
   onActualizarNombreCapitulo,
   onAgregarDetalle,
   onEliminarDetalle,
@@ -41,7 +39,6 @@ const SeccionCapitulosDetalle: React.FC<SeccionCapitulosDetalleProps> = ({
     handleFieldChange,
     handleFieldBlur,
   } = useCapitulosDetalle(
-    onToggleCapitulo,
     onActualizarNombreCapitulo,
     onActualizarDetalle,
   );
