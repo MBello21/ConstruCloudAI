@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Capitulo } from "../types";
+import type { Capitulo, DetalleToDelete } from "../types";
 import { deleteCapitulo } from "../services/actions/capitulos/delete-capitulo.action";
 
 interface UseCapitulosManagerProps {
@@ -14,10 +14,7 @@ export const useCapitulosManager = ({
   presupuestoId,
 }: UseCapitulosManagerProps) => {
   const [capituloToDelete, setCapituloToDelete] = useState<number | string | null>(null);
-  const [detalleToDelete, setDetalleToDelete] = useState<{
-    capituloId: number | string;
-    detalleId: number | string;
-  } | null>(null);
+  const [detalleToDelete, setDetalleToDelete] = useState<DetalleToDelete | null>(null);
 
   const handleAgregarCapitulo = () => {
     if (!presupuestoId) return;

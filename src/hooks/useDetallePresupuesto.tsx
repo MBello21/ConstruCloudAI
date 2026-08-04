@@ -5,6 +5,7 @@ import { usePresupuestoGuardar } from "./usePresupuestoGuardar";
 import { deleteCapitulo } from "../services/actions/capitulos/delete-capitulo.action";
 import { toast } from "sonner";
 import { getPresupuestosByID } from "../services/actions/presupuestos/get-presupuest.by-id.action";
+import { deletePresupuesto } from "../services/actions/presupuestos/delete-presupuesto.action";
 
 export const useDetallePresupuesto = () => {
   const { id } = useParams();
@@ -93,7 +94,14 @@ export const useDetallePresupuesto = () => {
     if (!presupuesto) return;
     console.log("Exportar presupuesto:", presupuesto.id);
   };
-
+  const handleEliminar = async (id: number) => {
+    try {
+      await deletePresupuesto(id);
+      navigate(-1);
+    } catch (_error) {
+      toast.error("No se pudo eliminar el presupuesto");
+    }
+  };
   return {
     presupuesto,
     capitulos,
@@ -102,6 +110,7 @@ export const useDetallePresupuesto = () => {
     setConfirmDelete,
     isDirty,
     isSaving,
+    handleEliminar,
     handleActualizarDetalle,
     handleActualizarNombreCapitulo,
     handleActualizarPresupuesto,

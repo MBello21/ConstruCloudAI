@@ -1,12 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CabeceraDetalle from "../components/presupuestos/CabeceraDetalle";
 import InfoGeneral from "../components/presupuestos/InfoGeneral";
 import SeccionCapitulosDetalle from "../components/presupuestos/SeccionCapitulosDetalle";
 import ResumenEconomico from "../components/presupuestos/ResumenEconomico";
 import { DirtyStateBar } from "../components/presupuestos/DirtyStateBar";
 import { useDetallePresupuesto } from "../hooks/useDetallePresupuesto";
+import { Modal } from "../components/modal/Modal";
+import ModalNuevoCliente from "../components/presupuestos/ModalNuevoCliente";
+import type { Cliente } from "../types";
 
 export const DetallePresupuesto = () => {
+  const [isModalNuevoCliente, setIsModalNuevoCliente] = useState(false);
+  const [clientes, setClientes] = useState<Cliente[]>([]);
   const {
     presupuesto,
     capitulos,
@@ -17,6 +22,7 @@ export const DetallePresupuesto = () => {
     confirmDelete,
     setConfirmDelete,
     handleExportar,
+    handleEliminar,
     handleActualizarPresupuesto,
     handleActualizarDetalle,
     handleAgregarCapitulo,
@@ -47,13 +53,16 @@ export const DetallePresupuesto = () => {
       <CabeceraDetalle
         presupuesto={presupuesto}
         onVolver={handleVolver}
-        // onEliminar={handleEliminar}
+        onEliminar={handleEliminar}
         onExportar={handleExportar}
       />
       <div className="max-w-4xl mx-auto">
         <InfoGeneral
           presupuesto={presupuesto}
           onActualizar={handleActualizarPresupuesto}
+          clientes={clientes}
+          setClientes={setClientes}
+          setIsModalNuevoCliente={setIsModalNuevoCliente}
         />
 
         <SeccionCapitulosDetalle
@@ -79,31 +88,20 @@ export const DetallePresupuesto = () => {
         onGuardar={handleGuardar}
       />
       {confirmDelete && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              ¿Eliminar {confirmDelete.tipo}?
-            </h3>
-            <p className="text-sm text-gray-600 mb-6">
-              Esta acción no se puede deshacer.
-            </p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setConfirmDelete(null)}
-                className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={confirmarEliminacion}
-                className="px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700"
-              >
-                Eliminar
-              </button>
-            </div>
-          </div>
-        </div>
+        <Modal
+          eliminate={confirmDelete.tipo}
+          setEliminate={setConfirmDelete}
+          handleConfirm={confirmarEliminacion}
+        />
       )}
+      <ModalNuevoCliente
+        isOpen={isModalNuevoCliente}
+        onClose={() => setIsModalNuevoCliente(false)}
+        onClienteCreado={(nuevoCliente) => {
+          setClientes((prev) => [...prev, nuevoCliente]);
+          handleActualizarPresupuesto("cliente_id", nuevoCliente.id);
+        }}
+      />
     </section>
   );
 };

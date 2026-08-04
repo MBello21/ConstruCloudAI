@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { Presupuesto, PresupuestoElement } from "./presupuesto.types";
 import type { Capitulo, Detalle } from "./capitulo.types";
+import type { Cliente } from "./cliente.types";
 
 export interface BadgeEstadoProps {
   estado: string;
@@ -15,7 +16,7 @@ export interface CabeceraTablaProps {
 export interface FiltrosTablaProps {
   filtros: { label: string; value: string }[];
   filtro: string;
-  handleFiltro: (f: string) => void;
+  setFiltro: Dispatch<SetStateAction<string>>;
 }
 
 export interface TablaPresupuestosProps {
@@ -78,4 +79,18 @@ export interface MetricCardProps {
   subtitulo: string;
   variacion?: number;
   destacado?: boolean;
+}
+
+export interface ClienteComboboxProps {
+  clientes: Cliente[];
+  value: number | null;
+  onChange: (clienteId: number | null) => void;
+  onCrearNuevo: () => void;
+  placeholder?: string;
+}
+
+export interface ModalNuevoClienteProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onClienteCreado: (cliente: Cliente) => void;
 }

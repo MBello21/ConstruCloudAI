@@ -4,3 +4,4 @@ export * from "./detalle.types";
 export * from "./navegation.types";
 export * from "./ui.types";
 export * from "./cliente.types";
+export * from "./common.types";
