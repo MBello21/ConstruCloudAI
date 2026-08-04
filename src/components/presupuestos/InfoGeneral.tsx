@@ -1,34 +1,37 @@
 import React, { useEffect, useMemo, useState } from "react";
-import type { Cliente, PresupuestoDetalle } from "../../types";
+import type { Cliente, PresupuestoDetalle, EditingField } from "../../types";
 import { getClientes } from "../../services/actions/clientes/get-clientes.action";
+import ClienteCombobox from "../ui/ClienteCombobox";
 
 interface InfoGeneralProps {
   presupuesto: PresupuestoDetalle;
   onActualizar: (campo: string, valor: string | number) => void;
-}
-
-interface EditingField {
-  [key: string]: boolean;
+  clientes: Cliente[];
+  setClientes: React.Dispatch<React.SetStateAction<Cliente[]>>;
+  setIsModalNuevoCliente: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const InfoGeneral: React.FC<InfoGeneralProps> = ({
   presupuesto,
   onActualizar,
+  clientes,
+  setClientes,
+  setIsModalNuevoCliente,
 }) => {
   const [editingFields, setEditingFields] = useState<EditingField>({});
   const [editValues, setEditValues] = useState<{ [key: string]: string }>({});
-  const [clientes, setClientes] = useState<Cliente[]>([]);
 
   useEffect(() => {
     getClientes().then(setClientes);
-  }, []);
+  }, [setClientes]);
+
   const clienteNombre = useMemo(() => {
-    if (!clientes || !presupuesto) return "Sin cliente";
+    if (!clientes || !presupuesto) return "Sin cliente asignado";
     const found = clientes.find(
       (c: Cliente) =>
         c.id === (presupuesto.cliente_id || presupuesto.cliente?.cliente_id),
     );
-    return found?.nombre_cliente || "Sin cliente";
+    return found?.nombre_cliente || "Sin cliente asignado";
   }, [clientes, presupuesto]);
 
   const toggleEdit = (field: string) => {
@@ -37,10 +40,7 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
         return { ...prev, [field]: false };
       } else {
         if (field === "cliente") {
-          setEditValues((prev) => ({
-            ...prev,
-            [field]: String(presupuesto.cliente?.cliente_id || "Sin cliente"),
-          }));
+          // No necesita setEditValues, el combobox maneja su propio estado
         } else if (field === "validez") {
           setEditValues((prev) => ({
             ...prev,
@@ -97,26 +97,22 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
             Cliente
           </label>
           {editingFields["cliente"] ? (
-            <select
-              value={editValues["cliente"] || ""}
-              onChange={(e) => {
-                handleChange("cliente", e.target.value);
-                onActualizar("cliente_id", Number(e.target.value));
-                setEditingFields((prev) => ({ ...prev, cliente: false }));
-              }}
-              onBlur={() =>
-                setEditingFields((prev) => ({ ...prev, cliente: false }))
+            <ClienteCombobox
+              clientes={clientes}
+              value={
+                presupuesto.cliente_id ??
+                presupuesto.cliente?.cliente_id ??
+                null
               }
-              autoFocus
-              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
-            >
-              <option value="">Seleccionar cliente</option>
-              {clientes.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nombre_cliente}
-                </option>
-              ))}
-            </select>
+              onChange={(clienteId) => {
+                if (clienteId !== null) {
+                  onActualizar("cliente_id", clienteId);
+                  setEditingFields((prev) => ({ ...prev, cliente: false }));
+                }
+              }}
+              onCrearNuevo={() => setIsModalNuevoCliente(true)}
+              placeholder="Seleccionar cliente..."
+            />
           ) : (
             <p
               onClick={() => toggleEdit("cliente")}

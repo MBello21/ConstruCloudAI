@@ -6,7 +6,7 @@ export const deletePresupuesto = async (
 ): Promise<DeletePresupuestoResponse> => {
   try {
     const response = await construcloudAPI.delete<DeletePresupuestoResponse>(
-      `/presupuesto/${id}`,
+      `/presupuestos/${id}`,
     );
     return response.data;
   } catch (error) {

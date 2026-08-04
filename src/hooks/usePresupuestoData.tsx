@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useBlocker } from "react-router";
-import type { PresupuestoDetalle, Capitulo } from "../types";
+import type { PresupuestoDetalle, Capitulo, ConfirmDelete } from "../types";
 import { getPresupuestosByID } from "../services/actions/presupuestos/get-presupuest.by-id.action";
 
 export const usePresupuestoData = () => {
@@ -13,10 +13,7 @@ export const usePresupuestoData = () => {
 
   const [capitulos, setCapitulos] = useState<Capitulo[]>([]);
   const [capitulosSnapshot, setCapitulosSnapshot] = useState<Capitulo[]>([]);
-  const [confirmDelete, setConfirmDelete] = useState<{
-    tipo: string;
-    id: number | string;
-  } | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<ConfirmDelete | null>(null);
 
   const isDirty = useMemo(() => {
     if (!presupuestoSnapshot) return false;
