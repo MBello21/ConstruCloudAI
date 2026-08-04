@@ -63,11 +63,7 @@ export const usePresupuestos = () => {
       toast("Error al actualizar el presupuesto");
     }
   };
-  const handleFiltro = (nuevoFiltro: string) => {
-    setFiltro(nuevoFiltro);
-    setPagina(1);
-    setTotalRegistros(0);
-  };
+ 
   return {
     presupuestos,
     presupuestoSeleccionado,
@@ -76,7 +72,7 @@ export const usePresupuestos = () => {
     setIsOpen,
     totalPaginas,
     filtro,
-    handleFiltro,
+    setFiltro,
     loading,
     totalRegistros,
     ITEMS_POR_PAGINA,

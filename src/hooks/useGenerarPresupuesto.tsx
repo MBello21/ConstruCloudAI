@@ -119,7 +119,11 @@ export const useGenerarPresupuesto = () => {
       presupuesto.capitulos.map((cap) => ({ ...cap, abierto: true })),
     );
   };
-
+  const total = capitulos.reduce(
+    (acc, c) => acc + c.detalles.reduce((sum, d) => sum + d.subtotal, 0),
+    0,
+  );
+  console.log(total);
   return {
     capitulos,
     data,

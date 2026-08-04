@@ -13,6 +13,7 @@ export const Presupuestos = () => {
   const { pathname } = useLocation();
   const {
     filtro,
+    setFiltro,
     presupuestos,
     isOpen,
     setIsOpen,
@@ -25,7 +26,6 @@ export const Presupuestos = () => {
     handleCambioPagina,
     handleEditar,
     handleGuardar,
-    handleFiltro,
   } = usePresupuestos();
 
   const { store } = useGlobalReducer();
@@ -41,7 +41,7 @@ export const Presupuestos = () => {
         <FiltrosTabla
           filtros={FILTROS_ESTADO_PRESUPUESTOS}
           filtro={filtro}
-          handleFiltro={handleFiltro}
+          setFiltro={setFiltro}
         />
       </div>
       <div className="border border-gray-300 rounded-lg overflow-hidden mt-5 shadow-md">

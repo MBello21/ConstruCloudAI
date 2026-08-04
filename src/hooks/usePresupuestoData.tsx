@@ -13,7 +13,9 @@ export const usePresupuestoData = () => {
 
   const [capitulos, setCapitulos] = useState<Capitulo[]>([]);
   const [capitulosSnapshot, setCapitulosSnapshot] = useState<Capitulo[]>([]);
-  const [confirmDelete, setConfirmDelete] = useState<ConfirmDelete | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<ConfirmDelete | null>(
+    null,
+  );
 
   const isDirty = useMemo(() => {
     if (!presupuestoSnapshot) return false;
@@ -63,7 +65,7 @@ export const usePresupuestoData = () => {
     };
     fetchData();
   }, [id]);
-
+  console.log(presupuesto?.total);
   const handleActualizarPresupuesto = (
     campo: string,
     valor: string | number,
