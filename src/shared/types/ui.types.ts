@@ -17,7 +17,8 @@ export interface CabeceraTablaProps {
 export interface FiltrosTablaProps {
   filtros: { label: string; value: string }[];
   filtro: string;
-  setFiltro: Dispatch<SetStateAction<string>>;
+  setFiltro?: Dispatch<SetStateAction<string>>;
+  handleFiltro?: (nuevoFiltro: string) => void;
 }
 
 export interface TablaPresupuestosProps {
@@ -96,3 +97,15 @@ export interface ModalNuevoClienteProps {
   onClose: () => void;
   onClienteCreado: (cliente: Cliente) => void;
 }
+
+export type NavbarBoton =
+  | {
+      path: string;
+      label: string;
+      to: string;
+    }
+  | {
+      path: string;
+      label: string;
+      action: "modal";
+    };

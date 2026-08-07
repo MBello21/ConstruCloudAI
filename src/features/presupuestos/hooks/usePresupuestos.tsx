@@ -24,27 +24,31 @@ export const usePresupuestos = () => {
       try {
         const skip = (pagina - 1) * ITEMS_POR_PAGINA;
         const data = await getPresupuestos(filtro, skip);
-        const clientes = await getClientes();
-        dispatch({ type: "set_clientes", payload: clientes });
         setPresupuestos(data.presupuestos);
         setTotalRegistros(data.total);
       } catch (_error) {
         toast.error("No se pudo conectar con el servidor. Inténtalo de nuevo.");
       } finally {
-        setTimeout(() => setLoading(false), 500);
+        setLoading(false);
       }
     };
     fetchData();
-  }, [pagina, dispatch, filtro, refresh]);
+  }, [pagina, filtro, refresh]);
 
   const totalPaginas = Math.ceil(totalRegistros / ITEMS_POR_PAGINA);
 
   const handleCambioPagina = (nuevaPagina: number): void => {
     setPagina(nuevaPagina);
   };
-  const handleEditar = (presupuesto: PresupuestoElement) => {
+  const handleEditar = async (presupuesto: PresupuestoElement) => {
     setPresupuestoSeleccionado(presupuesto);
     setIsOpen(true);
+    try {
+      const clientes = await getClientes();
+      dispatch({ type: "set_clientes", payload: clientes });
+    } catch (_error) {
+      console.error("Error cargando clientes:", _error);
+    }
   };
   const handleGuardar = async (data: PresupuestoFormData) => {
     if (!presupuestoSeleccionado || !presupuestoSeleccionado.id) {

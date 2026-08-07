@@ -47,7 +47,7 @@ const ContactoCliente: React.FC<ContactoClienteProps> = ({ cliente }) => {
 
         {cliente.direccion && (
           <div className="flex items-start gap-3">
-            <MapPin className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+            <MapPin className="w-5 h-5 text-gray-400 mt-1 shrink-0" />
             <div>
               <p className="text-xs text-gray-500 mb-1">Dirección</p>
               <div className="text-sm text-gray-900 font-medium">
@@ -59,7 +59,7 @@ const ContactoCliente: React.FC<ContactoClienteProps> = ({ cliente }) => {
         )}
 
         <div className="flex items-start gap-3 pt-2 border-t border-gray-200">
-          <Calendar className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+          <Calendar className="w-5 h-5 text-gray-400 mt-1 shrink-0" />
           <div>
             <p className="text-xs text-gray-500 mb-1">Cliente desde</p>
             <p className="text-sm text-gray-900 font-medium">{clienteDesde}</p>

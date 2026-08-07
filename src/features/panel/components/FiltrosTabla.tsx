@@ -4,13 +4,15 @@ const FiltrosTabla: React.FC<FiltrosTablaProps> = ({
   filtros,
   filtro,
   setFiltro,
+  handleFiltro,
 }) => {
+  const onChange = handleFiltro || setFiltro;
   return (
     <div className="flex gap-2">
       {filtros.map((f) => (
         <button
           key={f.label}
-          onClick={() => setFiltro(f.value)}
+          onClick={() => onChange?.(f.value)}
           className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
             filtro === f.value
               ? "bg-blue-950 text-white"
