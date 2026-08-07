@@ -1,6 +1,6 @@
 import { Plus, ChevronDown, ChevronRight, Trash2 } from "lucide-react";
 import type { SeccionCapitulosProps } from "../../../shared/types";
-import type { Detalle } from "../../../features/detalles/detalle.types";
+import type { Detalle } from "../../detalles/detalle.types";
 
 const SeccionCapitulos: React.FC<SeccionCapitulosProps> = ({
   capitulos,
@@ -73,8 +73,7 @@ const SeccionCapitulos: React.FC<SeccionCapitulosProps> = ({
                   )}
                 </button>
 
-                <input
-                  type="text"
+                <textarea
                   value={capitulo.nombre}
                   onChange={(e) =>
                     onActualizarNombreCapitulo(capitulo.id, e.target.value)
