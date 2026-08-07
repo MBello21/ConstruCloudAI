@@ -1,13 +1,10 @@
-import { RouterProvider } from "react-router";
-import { Toaster } from "sonner";
-import { router } from "./routes";
-import { StoreProvider } from "../state/StoreProvider";
+import { GlobalLoadingProvider } from "../shared/context/GlobalLoadingProvider";
+import { AppContent } from "./AppContent";
 
 export const App = () => {
   return (
-    <StoreProvider>
-      <Toaster position="top-right" />
-      <RouterProvider router={router} />
-    </StoreProvider>
+    <GlobalLoadingProvider>
+      <AppContent />
+    </GlobalLoadingProvider>
   );
 };

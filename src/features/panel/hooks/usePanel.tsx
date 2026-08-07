@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import type { PresupuestoElement, PresupuestoFormData } from "../../../features/presupuestos/presupuesto.types";
 import { getPresupuestos } from "../../../features/presupuestos/services/get-presupuestos.action";
 import { putPresupuesto } from "../../../features/presupuestos/services/put-presupuesto.action";
+import { useGlobalLoading } from "../../../shared/hooks/useGlobalLoading";
 
 export const usePanel = () => {
   const [filtro, setFiltro] = useState<string>("Todos");
@@ -13,9 +14,12 @@ export const usePanel = () => {
     useState<PresupuestoElement | null>(null);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { registerLoading, resolveLoading } = useGlobalLoading();
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      registerLoading("panel-tabla");
       const skip = 0;
       try {
         const data = await getPresupuestos(filtro, skip);
@@ -24,11 +28,14 @@ export const usePanel = () => {
       } catch (_error) {
         toast.error("No se pudo conectar con el servidor. Inténtalo de nuevo.");
       } finally {
-        setTimeout(() => setLoading(false), 500);
+        setTimeout(() => {
+          setLoading(false);
+          resolveLoading("panel-tabla");
+        }, 500);
       }
     };
     fetchData();
-  }, [filtro, refresh]);
+  }, [filtro, refresh, registerLoading, resolveLoading]);
   const handleEditar = (presupuesto: PresupuestoElement) => {
     setPresupuestoSeleccionado(presupuesto);
     setIsOpen(true);
