@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
-import type { PresupuestoDetalle } from "../presupuesto.types"; import type { Capitulo } from "../../capitulos/capitulo.types"; import type { ConfirmDelete } from "../../../shared/types";
+import type { PresupuestoDetalle } from "../presupuesto.types";
+import type { Capitulo } from "../../capitulos/capitulo.types";
 import { getPresupuestosByID } from "../services/get-presupuesto-by-id.action";
 import { useUnsavedChangesGuard } from "../../../shared/hooks";
 
@@ -14,7 +15,6 @@ export const usePresupuestoData = () => {
 
   const [capitulos, setCapitulos] = useState<Capitulo[]>([]);
   const [capitulosSnapshot, setCapitulosSnapshot] = useState<Capitulo[]>([]);
-  const [confirmDelete, setConfirmDelete] = useState<ConfirmDelete | null>(null);
 
   const isDirty = useMemo(() => {
     if (!presupuestoSnapshot) return false;
@@ -56,8 +56,6 @@ export const usePresupuestoData = () => {
     setPresupuestoSnapshot,
     capitulos,
     setCapitulos,
-    confirmDelete,
-    setConfirmDelete,
     capitulosSnapshot,
     setCapitulosSnapshot,
     isDirty,

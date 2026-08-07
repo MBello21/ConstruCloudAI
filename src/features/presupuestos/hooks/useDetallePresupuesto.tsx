@@ -1,15 +1,11 @@
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { usePresupuestoData } from "./usePresupuestoData";
 import { useCapitulosManager } from "../../capitulos/hooks/useCapitulosManager";
 import { usePresupuestoGuardar } from "./usePresupuestoGuardar";
-import { deleteCapitulo } from "../../capitulos/services/delete-capitulo.action";
-import { toast } from "sonner";
-import { getPresupuestosByID } from "../services/get-presupuesto-by-id.action";
-import { deletePresupuesto } from "../services/delete-presupuesto.action";
+import { usePresupuestoEliminar } from "./usePresupuestoEliminar";
 
 export const useDetallePresupuesto = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const {
     presupuesto,
@@ -18,8 +14,6 @@ export const useDetallePresupuesto = () => {
     setPresupuestoSnapshot,
     capitulos,
     setCapitulos,
-    confirmDelete,
-    setConfirmDelete,
     capitulosSnapshot,
     setCapitulosSnapshot,
     isDirty,
@@ -56,52 +50,30 @@ export const useDetallePresupuesto = () => {
     setCapitulosSnapshot,
   });
 
-  const handleVolver = () => {
-    navigate(-1);
-  };
-
-  const confirmarEliminacion = async () => {
-    if (!confirmDelete) return;
-
-    try {
-      if (confirmDelete.tipo === "capitulo") {
-        const esNuevo = !capitulosSnapshot.some(
-          (c) => c.id === confirmDelete.id,
-        );
-        if (!esNuevo) {
-          await deleteCapitulo(confirmDelete.id);
-          setCapitulosSnapshot((prev) =>
-            prev.filter((c) => c.id !== confirmDelete.id),
-          );
-          const data = await getPresupuestosByID(Number(id));
-          setPresupuesto(data);
-          setPresupuestoSnapshot(data);
-        }
-        setCapitulos((prev) => prev.filter((c) => c.id !== confirmDelete.id));
-      }
-      toast.success("Eliminado correctamente");
-    } catch (_error) {
-      toast.error("Error al eliminar");
-    } finally {
-      setConfirmDelete(null);
-    }
-  };
-  const handleEliminarCapitulo = (id: number | string) => {
-    setConfirmDelete({ tipo: "capitulo", id });
-  };
+  const {
+    confirmDelete,
+    setConfirmDelete,
+    confirmarEliminacion,
+    handleEliminarCapitulo,
+    handleEliminar,
+  } = usePresupuestoEliminar({
+    capitulosSnapshot,
+    setCapitulos,
+    setCapitulosSnapshot,
+    setPresupuesto,
+    setPresupuestoSnapshot,
+    presupuestoDataId: id,
+  });
 
   const handleExportar = () => {
     if (!presupuesto) return;
     console.log("Exportar presupuesto:", presupuesto.id);
   };
-  const handleEliminar = async (id: number) => {
-    try {
-      await deletePresupuesto(id);
-      navigate(-1);
-    } catch (_error) {
-      toast.error("No se pudo eliminar el presupuesto");
-    }
+
+  const handleVolver = () => {
+    window.history.back();
   };
+
   return {
     presupuesto,
     capitulos,
