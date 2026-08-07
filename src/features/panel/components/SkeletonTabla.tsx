@@ -7,11 +7,21 @@ export const SkeletonTabla = ({ showPagination }: SckeletonTablaProps) => {
       <table className="w-full border-collapse">
         <thead>
           <tr className="border-b border-gray-200 text-left text-sm text-gray-500 bg-gray-50">
-            <th className="p-3 font-medium">CÓDIGO</th>
-            <th className="p-3 font-medium">PROYECTO / CLIENTE</th>
-            <th className="p-3 font-medium">IMPORTE</th>
-            <th className="p-3 font-medium">FECHA</th>
-            <th className="p-3 font-medium">ESTADO</th>
+            <th className="p-3 font-medium">
+              <div className="h-3 bg-gray-200 rounded animate-pulse w-16" />
+            </th>
+            <th className="p-3 font-medium">
+              <div className="h-3 bg-gray-200 rounded animate-pulse w-36" />
+            </th>
+            <th className="p-3 font-medium">
+              <div className="h-3 bg-gray-200 rounded animate-pulse w-20" />
+            </th>
+            <th className="p-3 font-medium">
+              <div className="h-3 bg-gray-200 rounded animate-pulse w-14" />
+            </th>
+            <th className="p-3 font-medium">
+              <div className="h-3 bg-gray-200 rounded animate-pulse w-16" />
+            </th>
             <th className="p-3 font-medium"></th>
           </tr>
         </thead>
