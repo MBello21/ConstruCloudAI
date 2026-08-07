@@ -3,7 +3,7 @@ import type { Detalle } from "../detalles/detalle.types";
 export type { Detalle };
 
 export interface Capitulo {
-  id: number | string;
+  id: number
   presupuesto_id: number;
   numero: number;
   nombre: string;

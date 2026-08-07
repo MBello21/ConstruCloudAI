@@ -3,13 +3,8 @@ import { toast } from "sonner";
 import type { PresupuestoDetalle } from "../presupuesto.types";
 import type { Capitulo } from "../../capitulos/capitulo.types";
 import { putPresupuesto } from "../services/put-presupuesto.action";
-import { postCapitulo } from "../../capitulos/services/post-capitulo.action";
-import { putCapitulo } from "../../capitulos/services/put-capitulo.action";
-import { deleteCapitulo } from "../../capitulos/services/delete-capitulo.action";
-import { postDetalle } from "../../detalles/services/post-detalle.action";
-import { putDetalle } from "../../detalles/services/put-detalle.action";
-import { deleteDetalle } from "../../detalles/services/delete-detalle.action";
 import { getPresupuestosByID } from "../services/get-presupuesto-by-id.action";
+import { syncCapitulos } from "../services/sync-presupuesto.service";
 
 interface UsePresupuestoGuardarProps {
   presupuesto: PresupuestoDetalle | null;
@@ -46,7 +41,6 @@ export const usePresupuestoGuardar = ({
     setIsSaving(true);
 
     try {
-      // 1. Actualizar datos del presupuesto
       await putPresupuesto(presupuestoId, {
         titulo: presupuesto.titulo,
         descripcion: presupuesto.descripcion,
@@ -57,65 +51,8 @@ export const usePresupuestoGuardar = ({
         condiciones_pago: presupuesto.condiciones_pago,
       });
 
-      // 2. Detectar cambios en capítulos
-      const capitulosOriginales = new Set(capitulosSnapshot.map((c) => c.id));
-      const capitulosActuales = new Set(capitulos.map((c) => c.id));
+      await syncCapitulos(capitulos, capitulosSnapshot, presupuestoId);
 
-      // Capítulos eliminados
-      for (const cap of capitulosSnapshot) {
-        if (!capitulosActuales.has(cap.id)) {
-          await deleteCapitulo(cap.id);
-        }
-      }
-
-      // Capítulos nuevos o actualizados
-      for (const cap of capitulos) {
-        if (!capitulosOriginales.has(cap.id)) {
-          // Nuevo capítulo + sus detalles
-          const created = await postCapitulo({
-            presupuesto_id: Number(presupuestoId),
-            nombre: cap.nombre,
-            numero: cap.numero,
-            orden: cap.orden,
-          });
-          for (const det of cap.detalles) {
-            await postDetalle({ ...det, capitulo_id: created.id });
-          }
-        } else {
-          // Capítulo existente: actualizar nombre si cambió
-          const original = capitulosSnapshot.find((c) => c.id === cap.id);
-          if (original && original.nombre !== cap.nombre) {
-            await putCapitulo(cap.id, { nombre: cap.nombre });
-          }
-
-          // 3. Detectar cambios en detalles de este capítulo
-          const detallesOriginales = new Set(
-            original?.detalles.map((d) => d.id) || [],
-          );
-          const detallesActuales = new Set(cap.detalles.map((d) => d.id));
-
-          for (const det of original?.detalles || []) {
-            if (!detallesActuales.has(det.id)) {
-              await deleteDetalle(det.id);
-            }
-          }
-
-          for (const det of cap.detalles) {
-            if (!detallesOriginales.has(det.id)) {
-              await postDetalle({ ...det, capitulo_id: cap.id });
-            } else {
-              const detOriginal = original?.detalles.find(
-                (d) => d.id === det.id,
-              );
-              if (JSON.stringify(det) !== JSON.stringify(detOriginal)) {
-                await putDetalle(det.id, det);
-              }
-            }
-          }
-        }
-      }
-
-      // 4. Refrescar datos del backend
       const data = await getPresupuestosByID(Number(presupuestoId));
       setPresupuesto(data);
       setPresupuestoSnapshot(data);
