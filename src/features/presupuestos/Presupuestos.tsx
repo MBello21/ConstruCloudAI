@@ -1,5 +1,6 @@
 import { useLocation } from "react-router";
 import { SectionHeader } from "../../shared/components/SectionHeader";
+import { SectionHeaderSkeleton } from "../../shared/components/skeletons/SectionHeaderSkeleton";
 import FiltrosTabla from "../../features/panel/components/FiltrosTabla";
 import { usePresupuestos } from "./hooks/usePresupuestos";
 import { FILTROS_ESTADO_PRESUPUESTOS } from "../../shared/helpers/filtro.helpers";
@@ -31,12 +32,16 @@ export const Presupuestos = () => {
   const { store } = useGlobalReducer();
   return (
     <section className="p-3 px-5 min-h-full bg-gray-100">
-      <SectionHeader
-        title="GESTIÓN"
-        section="Presupuestos"
-        subtitle={`${pagina * ITEMS_POR_PAGINA > totalRegistros ? totalRegistros : pagina * ITEMS_POR_PAGINA} de ${totalRegistros} presupuestos`}
-        pathname={pathname}
-      />
+      {loading ? (
+        <SectionHeaderSkeleton />
+      ) : (
+        <SectionHeader
+          title="GESTIÓN"
+          section="Presupuestos"
+          subtitle={`${pagina * ITEMS_POR_PAGINA > totalRegistros ? totalRegistros : pagina * ITEMS_POR_PAGINA} de ${totalRegistros} presupuestos`}
+          pathname={pathname}
+        />
+      )}
       <div className="mt-5">
         <FiltrosTabla
           filtros={FILTROS_ESTADO_PRESUPUESTOS}

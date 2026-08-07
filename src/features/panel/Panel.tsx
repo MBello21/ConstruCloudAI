@@ -4,6 +4,7 @@ import TablaPresupuestos from "./components/TablaPresupuestos";
 import { SkeletonTabla } from "./components/SkeletonTabla";
 import { formatearFecha, formatearPrecio } from "../../shared/helpers";
 import { SectionHeader } from "../../shared/components/SectionHeader";
+import { SectionHeaderSkeleton } from "../../shared/components/skeletons/SectionHeaderSkeleton";
 import { usePanel } from "./hooks/usePanel";
 import { useLocation } from "react-router";
 import MetricasPanel from "./components/MetricasPanel";
@@ -29,12 +30,16 @@ export const Panel = () => {
 
   return (
     <section className="p-3 px-5 min-h-full bg-gray-100">
-      <SectionHeader
-        title="PANEL GENERAL"
-        section="Presupuesto de obra"
-        subtitle="Resumen de actividad · Julio 2026"
-        pathname={pathname}
-      />
+      {globalIsLoading ? (
+        <SectionHeaderSkeleton />
+      ) : (
+        <SectionHeader
+          title="PANEL GENERAL"
+          section="Presupuesto de obra"
+          subtitle="Resumen de actividad · Julio 2026"
+          pathname={pathname}
+        />
+      )}
       <div className="mt-5">
         <MetricasPanel />
       </div>
