@@ -14,9 +14,8 @@ export const SplashScreen = () => {
 
   return (
     <div
-      className={`fixed inset-0 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center z-50 transition-opacity duration-300 ${
-        isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
+      className={`fixed inset-0 bg-linear-to-b from-slate-50 to-slate-100 flex items-center justify-center z-50 transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
     >
       {/* Center container */}
       <div className="flex flex-col items-center gap-6">
@@ -39,9 +38,9 @@ export const SplashScreen = () => {
 
         {/* Skeleton lines */}
         <div className="w-64 flex flex-col gap-3 mt-8">
-          <div className="h-2 bg-gradient-to-r from-gray-300 via-gray-200 to-transparent rounded animate-pulse" />
-          <div className="h-2 bg-gradient-to-r from-gray-200 via-gray-300 to-transparent rounded animate-pulse" />
-          <div className="h-2 w-3/4 bg-gradient-to-r from-gray-300 via-gray-200 to-transparent rounded animate-pulse" />
+          <div className="h-2 bg-linear-to-r from-gray-300 via-gray-200 to-transparent rounded animate-pulse" />
+          <div className="h-2 bg-linear-to-r from-gray-200 via-gray-300 to-transparent rounded animate-pulse" />
+          <div className="h-2 w-3/4 bg-linear-to-r from-gray-300 via-gray-200 to-transparent rounded animate-pulse" />
         </div>
       </div>
     </div>
