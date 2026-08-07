@@ -1,0 +1,28 @@
+import type { Detalle } from "../detalles/detalle.types";
+
+export type { Detalle };
+
+export interface Capitulo {
+  id: number | string;
+  presupuesto_id: number;
+  numero: number;
+  nombre: string;
+  orden: number;
+  detalles: Detalle[];
+}
+
+export interface CreateCapituloRequest {
+  presupuesto_id: number;
+  numero: number;
+  nombre: string;
+  orden?: number;
+}
+
+export interface UpdateCapituloRequest {
+  nombre?: string;
+  numero?: number;
+  orden?: number;
+}
+
+export type CapituloResponse = Capitulo[];
+export type GetCapituloResponse = Capitulo;
