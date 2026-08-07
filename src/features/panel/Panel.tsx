@@ -1,4 +1,5 @@
 import CabeceraTabla from "./components/CabeceraTabla";
+import CabeceraTableSkeleton from "./components/CabeceraTableSkeleton";
 import TablaPresupuestos from "./components/TablaPresupuestos";
 import { SkeletonTabla } from "./components/SkeletonTabla";
 import { formatearFecha, formatearPrecio } from "../../shared/helpers";
@@ -8,19 +9,21 @@ import { useLocation } from "react-router";
 import MetricasPanel from "./components/MetricasPanel";
 import useGlobalReducer from "../../state/useGlobalReducer";
 import ModalEditarPresupuesto from "../presupuestos/components/ModalEditarPresupuesto";
+import { useGlobalLoading } from "../../shared/hooks/useGlobalLoading";
 
 export const Panel = () => {
   const {
     presupuestos,
     filtro,
     setFiltro,
-    loading,
+    loading: _loading,
     isOpen,
     setIsOpen,
     presupuestoSeleccionado,
     handleEditar,
     handleGuardar,
   } = usePanel();
+  const { isLoading: globalIsLoading } = useGlobalLoading();
   const { pathname } = useLocation();
   const { store } = useGlobalReducer();
 
@@ -36,13 +39,17 @@ export const Panel = () => {
         <MetricasPanel />
       </div>
       <div className="border border-gray-300 rounded-lg overflow-hidden mt-5 shadow-md">
-        <CabeceraTabla
-          totalRegistros={presupuestos.length}
-          filtro={filtro}
-          setFiltro={setFiltro}
-        />
+        {globalIsLoading ? (
+          <CabeceraTableSkeleton />
+        ) : (
+          <CabeceraTabla
+            totalRegistros={presupuestos.length}
+            filtro={filtro}
+            setFiltro={setFiltro}
+          />
+        )}
         <div className="min-h-112 bg-white flex flex-col justify-between">
-          {loading ? (
+          {globalIsLoading ? (
             <SkeletonTabla showPagination={false} />
           ) : (
             <TablaPresupuestos

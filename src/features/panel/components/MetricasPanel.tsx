@@ -3,16 +3,20 @@ import MetricCard from "./MetricCard";
 import { getMetricas } from "../services/get-metricas.action";
 import { formatearPrecio } from "../../../shared/helpers/formato.helpers";
 import type { MetricasResponse } from "../../../shared/types";
+import { useGlobalLoading } from "../../../shared/hooks/useGlobalLoading";
 
 const MetricasPanel: React.FC = () => {
   const [metricas, setMetricas] = useState<MetricasResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Keep local loading state for potential internal use
+  const [_loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { registerLoading, resolveLoading, isLoading: globalIsLoading } = useGlobalLoading();
 
   useEffect(() => {
     const cargarMetricas = async () => {
       try {
         setLoading(true);
+        registerLoading("metricas");
         const datos = await getMetricas();
         setMetricas(datos);
         setError(null);
@@ -22,13 +26,14 @@ const MetricasPanel: React.FC = () => {
         );
       } finally {
         setLoading(false);
+        resolveLoading("metricas");
       }
     };
 
     cargarMetricas();
-  }, []);
+  }, [registerLoading, resolveLoading]);
 
-  if (loading) {
+  if (globalIsLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
