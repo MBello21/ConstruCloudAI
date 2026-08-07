@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams, useBlocker } from "react-router";
+import { useParams } from "react-router";
 import type { PresupuestoDetalle } from "../presupuesto.types"; import type { Capitulo } from "../../capitulos/capitulo.types"; import type { ConfirmDelete } from "../../../shared/types";
 import { getPresupuestosByID } from "../services/get-presupuesto-by-id.action";
+import { useUnsavedChangesGuard } from "../../../shared/hooks";
 
 export const usePresupuestoData = () => {
   const { id } = useParams();
@@ -24,34 +25,7 @@ export const usePresupuestoData = () => {
     return presChanged || capChanged;
   }, [presupuesto, capitulos, presupuestoSnapshot, capitulosSnapshot]);
 
-  const blocker = useBlocker(
-    ({ currentLocation, nextLocation }) =>
-      isDirty && currentLocation.pathname !== nextLocation.pathname,
-  );
-
-  useEffect(() => {
-    if (blocker.state === "blocked") {
-      if (
-        confirm("Tienes cambios sin guardar. ¿Deseas salir sin guardarlos?")
-      ) {
-        blocker.proceed();
-      } else {
-        blocker.reset();
-      }
-    }
-  }, [blocker]);
-
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (isDirty) {
-        event.preventDefault();
-        event.returnValue = "";
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [isDirty]);
+  useUnsavedChangesGuard(isDirty);
 
   useEffect(() => {
     const fetchData = async () => {
