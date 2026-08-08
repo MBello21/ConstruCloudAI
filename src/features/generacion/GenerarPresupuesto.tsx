@@ -1,11 +1,11 @@
-import { ChevronLeft } from "lucide-react";
 import {
   FormularioGeneracion,
   SeccionCapitulos,
   BotonesFormulario,
 } from "../presupuestos/components";
-import { useGenerarPresupuesto } from "../presupuestos/hooks/useGenerarPresupuesto";
+import { useGenerarPresupuesto } from "./hooks/useGenerarPresupuesto";
 import { useNavigate } from "react-router";
+import { CabeceraFormulario } from "./components/CabeceraFormulario";
 
 export const GenerarPresupuesto = () => {
   const {
@@ -29,20 +29,13 @@ export const GenerarPresupuesto = () => {
   }
 
   return (
-    <section className="min-h-screen bg-gray-100 py-8 px-4">
+    <section className="min-h-screen bg-gray-100">
+      <CabeceraFormulario
+        title='Nuevo presupuesto'
+        subtitle='Introduzca un titulo y una descripción'
+        onVolver={handleVolver} />
+
       <div className="max-w-3xl mx-auto">
-        <button
-          onClick={handleVolver}
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 focus:outline-none">
-          <ChevronLeft className="w-4 h-4" />
-          Volver a presupuestos
-        </button>
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Nuevo presupuesto
-          </h1>
-          <p className="text-gray-600">Introduce el título y la descripción</p>
-        </div>
         <div className="mb-6">
           <label
             htmlFor="title"
