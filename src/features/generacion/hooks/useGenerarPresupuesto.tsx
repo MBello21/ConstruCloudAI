@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useGenerarFormulario } from "./useGenerarFormulario";
 import { useCapitulosManager } from "../../capitulos/hooks/useCapitulosManager";
 import { postPresupuesto } from "../services/post-presupuesto-ia.actions";
-import { getPresupuestosByID } from "../services/get-presupuesto-by-id.action";
-import type { PresupuestoDetalle } from "../presupuesto.types";
+import { getPresupuestosByID } from "../../presupuestos/services/get-presupuesto-by-id.action";
+import type { PresupuestoDetalle } from "../../presupuestos/presupuesto.types";
 import type { Capitulo } from "../../capitulos/capitulo.types";
 import type { Detalle } from "../../detalles/detalle.types";
 
