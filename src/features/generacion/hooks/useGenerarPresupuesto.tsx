@@ -79,7 +79,7 @@ export const useGenerarPresupuesto = () => {
       const presupuesto = await guardarPresupuestoGenerado({
         titulo: data.titulo,
         descripcion: data.descripcion,
-        cliente_id: data.cliente_id,
+        materiales_por_cliente: data.materiales_por_cliente,
         capitulos,
       });
       setFase("guardado");

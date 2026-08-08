@@ -7,14 +7,14 @@ import {
 interface FormularioData {
   titulo: string;
   descripcion: string;
-  cliente_id: number | null
+  materiales_por_cliente: boolean;
 }
 
 export const useGenerarFormulario = () => {
   const [data, setData] = useState<FormularioData>({
     titulo: "",
     descripcion: "",
-    cliente_id: null
+    materiales_por_cliente: false,
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);

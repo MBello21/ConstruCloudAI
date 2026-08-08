@@ -11,14 +11,17 @@ import { Presupuestos } from "../features/presupuestos/Presupuestos";
 import { DetallePresupuesto } from "../features/presupuestos/DetallePresupuesto";
 import { Clientes } from "../features/clientes/Clientes";
 import { ClienteDetalle } from "../features/clientes/ClienteDetalle";
+import { Login } from "../features/auth/Login";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+      <Route path="/login" element={<Login />} />
       <Route path="/" element={<Layout />} errorElement={<NotFound />}>
         <Route path="/" element={<Panel />} />
         <Route path="/presupuestos" element={<Presupuestos />} />
         <Route path="/clientes" element={<Clientes />} />
+        <Route path="/panel" element={<Panel />} />
       </Route>
       <Route path="/presupuesto/:id" element={<DetallePresupuesto />} />
       <Route path="/clientes/:id" element={<ClienteDetalle />} />
