@@ -1,10 +1,15 @@
 import { Sparkles } from "lucide-react";
 import type { FormularioGeneracionProps } from "../../../shared/types";
 
-const FormularioGeneracion: React.FC<FormularioGeneracionProps> = ({
+interface FormularioGeneracionExtendedProps extends FormularioGeneracionProps {
+  isGenerating?: boolean;
+}
+
+const FormularioGeneracion: React.FC<FormularioGeneracionExtendedProps> = ({
   handleChange,
   descripcion,
   handleSubmit,
+  isGenerating = false,
 }) => {
   return (
     <div className="bg-white border border-slate-300 rounded-lg shadow-md p-6">
@@ -26,15 +31,17 @@ const FormularioGeneracion: React.FC<FormularioGeneracionProps> = ({
         onChange={handleChange}
         name="descripcion"
         value={descripcion}
+        disabled={isGenerating}
       />
 
       <div className="flex justify-end">
         <button
           onClick={handleSubmit}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-950 text-white rounded-md font-medium text-sm hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-950 focus:ring-offset-2 transition-colors duration-200"
+          disabled={isGenerating}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-950 text-white rounded-md font-medium text-sm hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-950 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Sparkles className="w-4 h-4" />
-          Generar presupuesto
+          {isGenerating ? "Generando..." : "Generar presupuesto"}
         </button>
       </div>
     </div>
