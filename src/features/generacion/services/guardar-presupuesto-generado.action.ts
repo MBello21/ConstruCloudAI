@@ -2,11 +2,21 @@ import { construcloudAPI } from "../../../shared/services/construcloud.api";
 import type { Capitulo } from "../../capitulos/capitulo.types";
 import type { PresupuestoDetalle } from "../../presupuestos/presupuesto.types";
 
+export interface PresupuestoGenerado {
+  titulo: string
+  descripcion: string
+  cliente_id: number
+  estado: string
+  pago: string
+  validez: string
+  subtotal: number
+  iva: number
+  total: number
+  capitulos: Capitulo[]
+}
+
 export interface GuardarPresupuestoRequest {
-  titulo: string;
-  descripcion: string;
-  materiales_por_cliente: boolean;
-  capitulos: Capitulo[];
+  presupuesto: PresupuestoGenerado
 }
 
 export interface GuardarPresupuestoResponse {
@@ -20,7 +30,7 @@ export const guardarPresupuestoGenerado = async (
   try {
     const response = await construcloudAPI.post(
       "/presupuestos",
-      data,
+      data.presupuesto,
     );
     return response.data;
   } catch (error) {

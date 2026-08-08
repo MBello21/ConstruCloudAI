@@ -5,6 +5,7 @@ import { guardarPresupuestoGenerado } from "../services/guardar-presupuesto-gene
 import type { PresupuestoDetalle } from "../../presupuestos/presupuesto.types";
 import type { Capitulo } from "../../capitulos/capitulo.types";
 import type { Detalle } from "../../detalles/detalle.types";
+import type { PresupuestoGenerado } from "../services/post-presupuesto-ia.actions";
 
 type Fase = "formulario" | "revision" | "guardado";
 
@@ -13,6 +14,7 @@ export const useGenerarPresupuesto = () => {
   const [fase, setFase] = useState<Fase>("formulario");
   const [capitulos, setCapitulos] = useState<Capitulo[]>([]);
   const [capitulosAbiertos, setCapitulosAbiertos] = useState<Set<string | number>>(new Set());
+  const [presupuestoGenerado, setPresupuestoGenerado] = useState<PresupuestoGenerado | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -54,10 +56,9 @@ export const useGenerarPresupuesto = () => {
     const response = await handleGenerarIA();
     console.log("📊 Response from handleGenerarIA:", response);
     if (response) {
-      console.log("📊 response.capitulos:", response.capitulos);
-      console.log("📊 Type of capitulos:", Array.isArray(response.capitulos) ? "Array" : typeof response.capitulos);
-      setCapitulos(response.capitulos);
-      setCapitulosAbiertos(new Set(response.capitulos.map((c) => c.id)));
+      setCapitulos(response.presupuesto.capitulos);
+      setCapitulosAbiertos(new Set(response.presupuesto.capitulos.map((c) => c.id)));
+      setPresupuestoGenerado(response.presupuesto)
       setFase("revision");
       console.log("✅ Fase changed to 'revision'");
     } else {
@@ -75,12 +76,10 @@ export const useGenerarPresupuesto = () => {
   const handleGuardar = async (): Promise<PresupuestoDetalle | null> => {
     setIsSaving(true);
     setSaveError(null);
+    if (!presupuestoGenerado) return null;
     try {
       const presupuesto = await guardarPresupuestoGenerado({
-        titulo: data.titulo,
-        descripcion: data.descripcion,
-        materiales_por_cliente: data.materiales_por_cliente,
-        capitulos,
+        presupuesto: presupuestoGenerado
       });
       setFase("guardado");
       return presupuesto;
