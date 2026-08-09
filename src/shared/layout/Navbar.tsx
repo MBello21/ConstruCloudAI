@@ -5,11 +5,13 @@ import { Plus } from "lucide-react";
 import { BOTONES_POR_RUTA } from "../constants/navbar-button-data.constant";
 import ModalNuevoCliente from "../../features/clientes/components/ModalNuevoCliente";
 import type { Cliente } from "../../features/clientes/cliente.types";
+import { useAuth } from "../../features/auth/context/AuthContext";
 
 export const Navbar = () => {
   const { pathname } = useLocation();
   const [modalAbierto, setModalAbierto] = useState(false);
   const boton = BOTONES_POR_RUTA.find((b) => b.path === pathname);
+  const { user } = useAuth()
 
   const handleClienteCreado = (_cliente: Cliente) => {
     setModalAbierto(false);
@@ -50,7 +52,7 @@ export const Navbar = () => {
               </div>
               <div>
                 <h3 className="text-h6 font-semibold text-gray-900">
-                  Miguel García
+                  {user?.razon_social || 'Bienvenido'}
                 </h3>
                 <p className="text-xs">Panel de Gestión</p>
               </div>

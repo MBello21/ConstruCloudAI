@@ -25,7 +25,7 @@ export const usePresupuestoData = () => {
     return presChanged || capChanged;
   }, [presupuesto, capitulos, presupuestoSnapshot, capitulosSnapshot]);
 
-  useUnsavedChangesGuard(isDirty);
+  const blocker = useUnsavedChangesGuard(isDirty);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,5 +60,6 @@ export const usePresupuestoData = () => {
     setCapitulosSnapshot,
     isDirty,
     handleActualizarPresupuesto,
+    blocker,
   };
 };
