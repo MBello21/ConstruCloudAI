@@ -5,10 +5,6 @@ import { StoreProvider } from "../state/StoreProvider";
 import { SplashScreen } from "../shared/components/SplashScreen";
 import { useInitialLoading } from "../shared/hooks";
 
-/**
- * AppContent maneja el renderizado del splash screen y el router.
- * Este componente está dentro de GlobalLoadingProvider, por lo que puede usar useInitialLoading.
- */
 export const AppContent = () => {
   const isInitialLoad = useInitialLoading();
 

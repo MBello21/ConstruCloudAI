@@ -9,8 +9,24 @@ interface GlobalLoadingContextType {
 export const GlobalLoadingContext = createContext<GlobalLoadingContextType | undefined>(undefined);
 
 export const useGlobalLoadingProvider = () => {
-  const [pendingSources, setPendingSources] = useState<Set<string>>(new Set());
+  const [pendingSources, setPendingSources] = useState<Set<string>>(new Set(["initialization"]));
   const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setPendingSources((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete("initialization");
+        return newSet;
+      });
+    }, 0);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const registerLoading = useCallback((key: string) => {
     setPendingSources((prev) => new Set(prev).add(key));
@@ -33,14 +49,6 @@ export const useGlobalLoadingProvider = () => {
   }, []);
 
   const isLoading = pendingSources.size > 0;
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
 
   return { isLoading, registerLoading, resolveLoading };
 };

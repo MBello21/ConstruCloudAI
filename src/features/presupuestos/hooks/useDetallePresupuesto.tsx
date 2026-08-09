@@ -18,6 +18,7 @@ export const useDetallePresupuesto = () => {
     setCapitulosSnapshot,
     isDirty,
     handleActualizarPresupuesto,
+    blocker,
   } = usePresupuestoData();
 
   const {
@@ -101,5 +102,6 @@ export const useDetallePresupuesto = () => {
     detalleToDelete,
     setCapituloToDelete,
     setDetalleToDelete,
+    blocker,
   };
 };

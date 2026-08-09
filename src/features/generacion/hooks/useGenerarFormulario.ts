@@ -38,12 +38,9 @@ export const useGenerarFormulario = () => {
         descripcion: data.descripcion,
         materiales_por_cliente: data.materiales_por_cliente,
       });
-      console.log("📥 Response from postPresupuesto:", response);
-      console.log("📥 Full response structure:", JSON.stringify(response, null, 2));
       return response;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Error desconocido";
-      console.log("❌ Error in handleSubmit:", errorMessage);
       setError(errorMessage);
       return null;
     } finally {
