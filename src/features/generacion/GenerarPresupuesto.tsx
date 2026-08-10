@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import FormularioGeneracion from "./components/FormularioGeneracion";
 import SeccionCapitulos from "./components/SeccionCapitulos";
 import BotonesFormulario from "./components/BotonesFormulario";
@@ -6,6 +6,9 @@ import { useGenerarPresupuesto } from "./hooks/useGenerarPresupuesto";
 import { useNavigate } from "react-router";
 import { CabeceraFormulario } from "./components/CabeceraFormulario";
 import { useUnsavedChangesGuard } from "../../shared/hooks/useUnsavedChangesGuard";
+import ClienteCombobox from "../clientes/components/ClienteCombobox";
+import ModalNuevoCliente from "../clientes/components/ModalNuevoCliente";
+import type { Cliente } from "../clientes/cliente.types";
 
 export const GenerarPresupuesto = () => {
   const {
@@ -28,9 +31,18 @@ export const GenerarPresupuesto = () => {
     isSaving,
     error,
     saveError,
+    clienteId,
+    setClienteId,
+    clientes,
   } = useGenerarPresupuesto();
   const navigate = useNavigate();
+  const [isModalNuevoClienteOpen, setIsModalNuevoClienteOpen] = useState(false);
+  const [clientesActualizados, setClientesActualizados] = useState<Cliente[]>(clientes);
   void useUnsavedChangesGuard(fase === "revision");
+
+  useEffect(() => {
+    setClientesActualizados(clientes);
+  }, [clientes]);
 
   const handleVolver = () => {
     navigate(-1);
@@ -41,6 +53,12 @@ export const GenerarPresupuesto = () => {
     if (presupuesto) {
       navigate(`/presupuestos/${presupuesto.id}`);
     }
+  };
+
+  const handleClienteCreado = (nuevoCliente: Cliente) => {
+    setClientesActualizados((prev) => [...prev, nuevoCliente]);
+    setClienteId(nuevoCliente.id);
+    setIsModalNuevoClienteOpen(false);
   };
 
   useEffect(() => {
@@ -106,6 +124,20 @@ export const GenerarPresupuesto = () => {
                   Revisa y edita el presupuesto generado. Puedes ajustar cualquier valor antes de guardar.
                 </p>
               </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Cliente asignado
+                </label>
+                <ClienteCombobox
+                  clientes={clientesActualizados}
+                  value={clienteId}
+                  onChange={setClienteId}
+                  onCrearNuevo={() => setIsModalNuevoClienteOpen(true)}
+                  placeholder="Seleccionar cliente..."
+                />
+              </div>
+
               <SeccionCapitulos
                 capitulos={capitulos}
                 capitulosAbiertos={capitulosAbiertos}
@@ -128,6 +160,12 @@ export const GenerarPresupuesto = () => {
               onRegenetar={handleRegenerar}
               onGuardar={handleGuardarClick}
               isLoading={isSaving}
+            />
+
+            <ModalNuevoCliente
+              isOpen={isModalNuevoClienteOpen}
+              onClose={() => setIsModalNuevoClienteOpen(false)}
+              onClienteCreado={handleClienteCreado}
             />
           </>
         )}
