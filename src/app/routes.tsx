@@ -2,7 +2,6 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-  Navigate,
 } from "react-router";
 import { Layout } from "./Layout";
 import { NotFound } from "./NotFound";
@@ -22,8 +21,22 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route element={<AuthLayout />}>
-        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-        <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          }
+        />
         <Route path="/" element={<Layout />} errorElement={<NotFound />}>
           <Route index element={<Panel />} />
           <Route path="panel" element={<Panel />} />

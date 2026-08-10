@@ -53,7 +53,7 @@ export const GenerarPresupuesto = () => {
 
   const handleVerPresupuesto = () => {
     if (presupuestoGuardadoId) {
-      navigate(`/presupuestos/${presupuestoGuardadoId}`);
+      navigate(`/presupuesto/${presupuestoGuardadoId}`);
     }
   };
 
@@ -61,15 +61,14 @@ export const GenerarPresupuesto = () => {
     navigate("/panel");
   };
 
+  console.log(presupuestoGuardadoId);
+
   return (
     <>
       <ModalConfirmarSalida blocker={blocker} />
 
       <section className="min-h-screen bg-gray-100">
-        <CabeceraFormulario
-          onVolver={handleVolver}
-          fase={fase}
-        />
+        <CabeceraFormulario onVolver={handleVolver} fase={fase} />
 
         <div className="max-w-3xl mx-auto">
           {/* Fase: Formulario */}
@@ -115,7 +114,8 @@ export const GenerarPresupuesto = () => {
               <div className="mb-8">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                   <p className="text-sm text-blue-900">
-                    Revisa y edita el presupuesto generado. Puedes ajustar cualquier valor antes de guardar.
+                    Revisa y edita el presupuesto generado. Puedes ajustar
+                    cualquier valor antes de guardar.
                   </p>
                 </div>
 

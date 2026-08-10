@@ -9,6 +9,7 @@ import { Modal } from "../../shared/components/Modal";
 import { ModalConfirmarSalida } from "../../shared/components/ModalConfirmarSalida";
 import ModalNuevoCliente from "../../features/clientes/components/ModalNuevoCliente";
 import type { Cliente } from "../../features/clientes/cliente.types";
+import { SplashScreen } from "../../shared/components/SplashScreen";
 
 export const DetallePresupuesto = () => {
   const [isModalNuevoCliente, setIsModalNuevoCliente] = useState(false);
@@ -36,65 +37,65 @@ export const DetallePresupuesto = () => {
     blocker,
   } = useDetallePresupuesto();
 
-  if (!presupuesto) return <div>Cargando...</div>;
+  if (!presupuesto) return <SplashScreen />;
   console.log({ presupuesto });
   return (
     <>
       <ModalConfirmarSalida blocker={blocker} />
       <section className="min-h-screen bg-gray-100 pb-32">
-      <CabeceraDetalle
-        presupuesto={presupuesto}
-        onVolver={handleVolver}
-        onEliminar={handleEliminar}
-        onExportar={handleExportar}
-      />
-      <div className="max-w-4xl mx-auto">
-        <InfoGeneral
+        <CabeceraDetalle
           presupuesto={presupuesto}
-          onActualizar={handleActualizarPresupuesto}
-          clientes={clientes}
-          setClientes={setClientes}
-          setIsModalNuevoCliente={setIsModalNuevoCliente}
+          onVolver={handleVolver}
+          onEliminar={handleEliminar}
+          onExportar={handleExportar}
         />
+        <div className="max-w-4xl mx-auto">
+          <InfoGeneral
+            presupuesto={presupuesto}
+            onActualizar={handleActualizarPresupuesto}
+            clientes={clientes}
+            setClientes={setClientes}
+            setIsModalNuevoCliente={setIsModalNuevoCliente}
+          />
 
-        <SeccionCapitulosDetalle
-          capitulos={capitulos}
-          onAgregarCapitulo={handleAgregarCapitulo}
-          onEliminarCapitulo={handleEliminarCapitulo}
-          onActualizarNombreCapitulo={handleActualizarNombreCapitulo}
-          onAgregarDetalle={handleAgregarDetalle}
-          onEliminarDetalle={handleEliminarDetalle}
-          onActualizarDetalle={handleActualizarDetalle}
-        />
+          <SeccionCapitulosDetalle
+            capitulos={capitulos}
+            onAgregarCapitulo={handleAgregarCapitulo}
+            onEliminarCapitulo={handleEliminarCapitulo}
+            onActualizarNombreCapitulo={handleActualizarNombreCapitulo}
+            onAgregarDetalle={handleAgregarDetalle}
+            onEliminarDetalle={handleEliminarDetalle}
+            onActualizarDetalle={handleActualizarDetalle}
+          />
 
-        <ResumenEconomico
-          subtotal={presupuesto.subtotal}
-          iva={presupuesto.iva}
-        />
-      </div>
+          <ResumenEconomico
+            subtotal={presupuesto.subtotal}
+            iva={presupuesto.iva}
+          />
+        </div>
 
-      <DirtyStateBar
-        isDirty={isDirty}
-        isSaving={isSaving}
-        onDescartar={handleDescartar}
-        onGuardar={handleGuardar}
-      />
-      {confirmDelete && (
-        <Modal
-          eliminate={confirmDelete.tipo}
-          setEliminate={setConfirmDelete}
-          handleConfirm={confirmarEliminacion}
+        <DirtyStateBar
+          isDirty={isDirty}
+          isSaving={isSaving}
+          onDescartar={handleDescartar}
+          onGuardar={handleGuardar}
         />
-      )}
-      <ModalNuevoCliente
-        isOpen={isModalNuevoCliente}
-        onClose={() => setIsModalNuevoCliente(false)}
-        onClienteCreado={(nuevoCliente) => {
-          setClientes((prev) => [...prev, nuevoCliente]);
-          handleActualizarPresupuesto("cliente_id", nuevoCliente.id);
-        }}
-      />
-    </section>
+        {confirmDelete && (
+          <Modal
+            eliminate={confirmDelete.tipo}
+            setEliminate={setConfirmDelete}
+            handleConfirm={confirmarEliminacion}
+          />
+        )}
+        <ModalNuevoCliente
+          isOpen={isModalNuevoCliente}
+          onClose={() => setIsModalNuevoCliente(false)}
+          onClienteCreado={(nuevoCliente) => {
+            setClientes((prev) => [...prev, nuevoCliente]);
+            handleActualizarPresupuesto("cliente_id", nuevoCliente.id);
+          }}
+        />
+      </section>
     </>
   );
 };

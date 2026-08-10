@@ -78,6 +78,12 @@ const SeccionCapitulos: React.FC<SeccionCapitulosProps> = ({
                   onChange={(e) =>
                     onActualizarNombreCapitulo(capitulo.id, e.target.value)
                   }
+                  rows={1}
+                  onInput={(e) => {
+                    e.currentTarget.style.height = "auto";
+                    e.currentTarget.style.height =
+                      e.currentTarget.scrollHeight + "px";
+                  }}
                   className="flex-1 px-2 py-1 bg-transparent border-0 font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-950 rounded"
                 />
 
