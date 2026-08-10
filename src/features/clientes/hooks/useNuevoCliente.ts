@@ -9,6 +9,10 @@ interface FormData {
   email: string;
   direccion: string;
   poblacion: string;
+  cif: string;
+  tipo: string;
+  estado: string;
+  notas: string;
 }
 
 interface UseNuevoClienteReturn {
@@ -26,6 +30,10 @@ const initialFormData: FormData = {
   email: "",
   direccion: "",
   poblacion: "",
+  cif: "",
+  tipo: "Empresa",
+  estado: "Activo",
+  notas: "",
 };
 
 export const useNuevoCliente = (): UseNuevoClienteReturn => {
@@ -38,6 +46,14 @@ export const useNuevoCliente = (): UseNuevoClienteReturn => {
 
     if (!formData.nombre_cliente.trim()) {
       newErrors.nombre_cliente = "El nombre del cliente es obligatorio";
+    }
+
+    if (!formData.telefono.trim()) {
+      newErrors.telefono = "El teléfono es obligatorio";
+    }
+
+    if (!formData.poblacion.trim()) {
+      newErrors.poblacion = "La población es obligatoria";
     }
 
     if (formData.email && !formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
@@ -75,14 +91,18 @@ export const useNuevoCliente = (): UseNuevoClienteReturn => {
     try {
       const base = {
         nombre_cliente: formData.nombre_cliente.trim(),
-        telefono: formData.telefono.trim() || "Sin especificar",
-        poblacion: formData.poblacion.trim() || "Sin especificar",
+        telefono: formData.telefono.trim(),
+        poblacion: formData.poblacion.trim(),
+        tipo: formData.tipo,
+        estado: formData.estado,
       };
 
       const finalData = {
         ...base,
         ...(formData.email.trim() && { email: formData.email.trim() }),
         ...(formData.direccion.trim() && { direccion: formData.direccion.trim() }),
+        ...(formData.cif.trim() && { cif: formData.cif.trim() }),
+        ...(formData.notas.trim() && { notas: formData.notas.trim() }),
       };
 
       const nuevoCliente = await postCliente(finalData as CreateClienteRequest);
