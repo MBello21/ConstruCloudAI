@@ -28,12 +28,12 @@ export const router = createBrowserRouter(
           <Route index element={<Panel />} />
           <Route path="panel" element={<Panel />} />
           <Route path="presupuestos" element={<Presupuestos />} />
-          <Route path="presupuesto/:id" element={<DetallePresupuesto />} />
           <Route path="clientes" element={<Clientes />} />
-          <Route path="clientes/:id" element={<ClienteDetalle />} />
-          <Route path="nuevo-presupuesto" element={<GenerarPresupuesto />} />
           <Route path="configuracion" element={<Configuracion />} />
         </Route>
+        <Route path="presupuesto/:id" element={<DetallePresupuesto />} />
+        <Route path="clientes/:id" element={<ClienteDetalle />} />
+        <Route path="nuevo-presupuesto" element={<GenerarPresupuesto />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </>,

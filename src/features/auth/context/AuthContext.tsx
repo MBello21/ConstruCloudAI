@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await getUser();
       setUser(data);
       setAuthState("authenticated");
-      navigate("/panel");
+      navigate("/");
     } catch (error) {
       localStorage.removeItem("access_token");
       localStorage.removeItem("token_type");
