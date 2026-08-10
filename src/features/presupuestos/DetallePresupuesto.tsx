@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CabeceraDetalle from "./components/CabeceraDetalle";
 import InfoGeneral from "./components/InfoGeneral";
 import SeccionCapitulosDetalle from "./components/SeccionCapitulosDetalle";
@@ -6,6 +6,7 @@ import ResumenEconomico from "./components/ResumenEconomico";
 import { DirtyStateBar } from "./components/DirtyStateBar";
 import { useDetallePresupuesto } from "./hooks/useDetallePresupuesto";
 import { Modal } from "../../shared/components/Modal";
+import { ModalConfirmarSalida } from "../../shared/components/ModalConfirmarSalida";
 import ModalNuevoCliente from "../../features/clientes/components/ModalNuevoCliente";
 import type { Cliente } from "../../features/clientes/cliente.types";
 
@@ -32,24 +33,15 @@ export const DetallePresupuesto = () => {
     handleEliminarDetalle,
     handleDescartar,
     handleGuardar,
+    blocker,
   } = useDetallePresupuesto();
-
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (isDirty) {
-        e.preventDefault();
-        e.returnValue = "";
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [isDirty]);
 
   if (!presupuesto) return <div>Cargando...</div>;
   console.log({ presupuesto });
   return (
-    <section className="min-h-screen bg-gray-100 pb-32">
+    <>
+      <ModalConfirmarSalida blocker={blocker} />
+      <section className="min-h-screen bg-gray-100 pb-32">
       <CabeceraDetalle
         presupuesto={presupuesto}
         onVolver={handleVolver}
@@ -103,5 +95,6 @@ export const DetallePresupuesto = () => {
         }}
       />
     </section>
+    </>
   );
 };

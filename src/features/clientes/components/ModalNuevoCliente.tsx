@@ -18,8 +18,8 @@ const ModalNuevoCliente: React.FC<ModalNuevoClienteProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+      <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white">
           <h2 className="text-lg font-bold text-gray-900">Nuevo Cliente</h2>
           <button
             onClick={onClose}
@@ -30,6 +30,7 @@ const ModalNuevoCliente: React.FC<ModalNuevoClienteProps> = ({
         </div>
 
         <div className="p-6 space-y-4">
+          {/* Nombre del Cliente */}
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
               Nombre del Cliente *
@@ -52,65 +53,139 @@ const ModalNuevoCliente: React.FC<ModalNuevoClienteProps> = ({
             )}
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
-              Teléfono
-            </label>
-            <input
-              type="tel"
-              value={formData.telefono}
-              onChange={(e) => handleInputChange("telefono", e.target.value)}
-              placeholder="Ej: +34 912 345 678"
-              className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
-            />
+          {/* CIF / NIF | Tipo */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
+                CIF / NIF
+              </label>
+              <input
+                type="text"
+                value={formData.cif}
+                onChange={(e) => handleInputChange("cif", e.target.value)}
+                placeholder="Ej: B-12345678"
+                className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
+                Tipo
+              </label>
+              <select
+                value={formData.tipo}
+                onChange={(e) => handleInputChange("tipo", e.target.value)}
+                className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950 bg-white"
+              >
+                <option value="Empresa">Empresa</option>
+                <option value="Particular">Particular</option>
+                <option value="Autónomo">Autónomo</option>
+              </select>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
-              Email
-            </label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleInputChange("email", e.target.value)}
-              placeholder="Ej: juan@ejemplo.com"
-              className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950 ${
-                errors.email ? "border-red-500" : "border-gray-200"
-              }`}
-            />
-            {errors.email && (
-              <p className="text-xs text-red-600 mt-1">{errors.email}</p>
-            )}
+          {/* Teléfono * | Email */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
+                Teléfono *
+              </label>
+              <input
+                type="tel"
+                value={formData.telefono}
+                onChange={(e) => handleInputChange("telefono", e.target.value)}
+                placeholder="Ej: +34 912 345 678"
+                className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950 ${
+                  errors.telefono ? "border-red-500" : "border-gray-200"
+                }`}
+              />
+              {errors.telefono && (
+                <p className="text-xs text-red-600 mt-1">{errors.telefono}</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
+                Email
+              </label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                placeholder="Ej: juan@ejemplo.com"
+                className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950 ${
+                  errors.email ? "border-red-500" : "border-gray-200"
+                }`}
+              />
+              {errors.email && (
+                <p className="text-xs text-red-600 mt-1">{errors.email}</p>
+              )}
+            </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
-              Dirección
-            </label>
-            <input
-              type="text"
-              value={formData.direccion}
-              onChange={(e) => handleInputChange("direccion", e.target.value)}
-              placeholder="Ej: Calle Principal 123"
-              className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
-            />
+          {/* Dirección | Población * */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
+                Dirección
+              </label>
+              <input
+                type="text"
+                value={formData.direccion}
+                onChange={(e) => handleInputChange("direccion", e.target.value)}
+                placeholder="Ej: Calle Principal 123"
+                className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
+                Población *
+              </label>
+              <input
+                type="text"
+                value={formData.poblacion}
+                onChange={(e) => handleInputChange("poblacion", e.target.value)}
+                placeholder="Ej: Madrid"
+                className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950 ${
+                  errors.poblacion ? "border-red-500" : "border-gray-200"
+                }`}
+              />
+              {errors.poblacion && (
+                <p className="text-xs text-red-600 mt-1">{errors.poblacion}</p>
+              )}
+            </div>
           </div>
 
+          {/* Estado */}
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
-              Población
+              Estado
             </label>
-            <input
-              type="text"
-              value={formData.poblacion}
-              onChange={(e) => handleInputChange("poblacion", e.target.value)}
-              placeholder="Ej: Madrid"
-              className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
+            <select
+              value={formData.estado}
+              onChange={(e) => handleInputChange("estado", e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950 bg-white"
+            >
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+              <option value="Potencial">Potencial</option>
+            </select>
+          </div>
+
+          {/* Notas */}
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
+              Notas
+            </label>
+            <textarea
+              value={formData.notas}
+              onChange={(e) => handleInputChange("notas", e.target.value)}
+              placeholder="Observaciones sobre el cliente..."
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950 resize-none"
             />
           </div>
         </div>
 
-        <div className="flex gap-3 px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+        <div className="flex gap-3 px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg sticky bottom-0">
           <button
             onClick={onClose}
             disabled={isLoading}

@@ -19,8 +19,7 @@ export const useGenerarPresupuesto = () => {
   const [presupuestoGenerado, setPresupuestoGenerado] = useState<PresupuestoGenerado | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [clienteId, setClienteId] = useState<number | null>(null);
-  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [presupuestoGuardadoId, setPresupuestoGuardadoId] = useState<string | number | null>(null);
 
   const {
     handleAgregarCapitulo,
@@ -111,6 +110,7 @@ export const useGenerarPresupuesto = () => {
         presupuesto: presupuestoConCliente
       });
       setFase("guardado");
+      setPresupuestoGuardadoId(presupuesto.id);
       return presupuesto;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Error desconocido";
@@ -141,8 +141,7 @@ export const useGenerarPresupuesto = () => {
     isSaving,
     error,
     saveError,
-    clienteId,
-    setClienteId,
-    clientes,
+    presupuestoGuardadoId,
+    presupuestoGenerado,
   };
 };
