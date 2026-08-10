@@ -18,6 +18,8 @@ export interface User {
   web: string | null;
 }
 
+type AuthState = "loading" | "authenticated" | "unauthenticated";
+
 interface AuthContextType {
   token: string | null;
   user: User | null;
@@ -35,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [authState, setAuthState] = useState<AuthState>("loading");
   const { registerLoading, resolveLoading } = useGlobalLoading();
 
   useEffect(() => {
@@ -43,12 +45,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       registerLoading("auth");
       try {
         const savedToken = localStorage.getItem("access_token");
-        if (savedToken) {
-          setToken(savedToken);
-          const data = await getUser()
-          setUser(data)
+        if (!savedToken) {
+          setAuthState("unauthenticated");
+          return;
         }
-        setIsLoading(false);
+        setToken(savedToken);
+        const data = await getUser();
+        setUser(data);
+        setAuthState("authenticated");
+      } catch {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("token_type");
+        setToken(null);
+        setUser(null);
+        setAuthState("unauthenticated");
       } finally {
         resolveLoading("auth");
       }
@@ -58,38 +68,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [registerLoading, resolveLoading]);
 
   const handleLogin = async (credentials: LoginRequest) => {
-    setIsLoading(true);
     try {
       const response = await login(credentials);
       localStorage.setItem("access_token", response.access_token);
       localStorage.setItem("token_type", response.token_type);
-      setToken(response.access_token)
+      setToken(response.access_token);
+      const data = await getUser();
+      setUser(data);
+      setAuthState("authenticated");
       navigate("/panel");
     } catch (error) {
       localStorage.removeItem("access_token");
       localStorage.removeItem("token_type");
       setToken(null);
+      setUser(null);
+      setAuthState("unauthenticated");
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
-  console.log(user)
+
   const handleSignup = async (credentials: SignupRequest) => {
-    setIsLoading(true);
     try {
       const response = await signup(credentials);
-      setToken(response.access_token);
       localStorage.setItem("access_token", response.access_token);
       localStorage.setItem("token_type", response.token_type);
+      setToken(response.access_token);
+      const data = await getUser();
+      setUser(data);
+      setAuthState("authenticated");
       navigate("/panel");
     } catch (error) {
       localStorage.removeItem("access_token");
       localStorage.removeItem("token_type");
       setToken(null);
+      setUser(null);
+      setAuthState("unauthenticated");
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -98,14 +112,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     localStorage.removeItem("access_token");
     localStorage.removeItem("token_type");
+    setAuthState("unauthenticated");
     navigate("/login");
   };
 
   const value: AuthContextType = {
     token,
     user,
-    isAuthenticated: !!token,
-    isLoading,
+    isAuthenticated: authState === "authenticated",
+    isLoading: authState === "loading",
     login: handleLogin,
     signup: handleSignup,
     logout: handleLogout,

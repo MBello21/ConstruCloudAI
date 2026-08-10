@@ -25,7 +25,7 @@ export const router = createBrowserRouter(
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
         <Route path="/" element={<Layout />} errorElement={<NotFound />}>
-          <Route index element={<Navigate to="/panel" replace />} />
+          <Route index element={<Panel />} />
           <Route path="panel" element={<Panel />} />
           <Route path="presupuestos" element={<Presupuestos />} />
           <Route path="presupuesto/:id" element={<DetallePresupuesto />} />

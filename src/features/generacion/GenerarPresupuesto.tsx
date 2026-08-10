@@ -7,11 +7,16 @@ import { CabeceraFormulario } from "./components/CabeceraFormulario";
 import { useUnsavedChangesGuard } from "../../shared/hooks/useUnsavedChangesGuard";
 import { ModalConfirmarSalida } from "../../shared/components/ModalConfirmarSalida";
 import { CheckCircle } from "lucide-react";
+import ClienteCombobox from "../clientes/components/ClienteCombobox";
+import ModalNuevoCliente from "../clientes/components/ModalNuevoCliente";
 
 export const GenerarPresupuesto = () => {
   const {
     fase,
     capitulos,
+    clientes,
+    clienteId,
+    setClienteId,
     capitulosAbiertos,
     data,
     handleChange,
@@ -31,13 +36,12 @@ export const GenerarPresupuesto = () => {
     saveError,
     presupuestoGuardadoId,
     presupuestoGenerado,
+    modalClienteAbierto,
+    setModalClienteAbierto,
+    handleClienteCreado,
   } = useGenerarPresupuesto();
   const navigate = useNavigate();
   const blocker = useUnsavedChangesGuard(fase === "revision");
-
-  useEffect(() => {
-    setClientesActualizados(clientes);
-  }, [clientes]);
 
   const handleVolver = () => {
     navigate(-1);
@@ -114,6 +118,19 @@ export const GenerarPresupuesto = () => {
                     Revisa y edita el presupuesto generado. Puedes ajustar cualquier valor antes de guardar.
                   </p>
                 </div>
+
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Asignar cliente *
+                  </label>
+                  <ClienteCombobox
+                    clientes={clientes || []}
+                    value={clienteId}
+                    onChange={(id) => setClienteId(id)}
+                    onCrearNuevo={() => setModalClienteAbierto(true)}
+                  />
+                </div>
+
                 <SeccionCapitulos
                   capitulos={capitulos}
                   capitulosAbiertos={capitulosAbiertos}
@@ -136,6 +153,12 @@ export const GenerarPresupuesto = () => {
                 onRegenetar={handleRegenerar}
                 onGuardar={handleGuardarClick}
                 isLoading={isSaving}
+              />
+
+              <ModalNuevoCliente
+                isOpen={modalClienteAbierto}
+                onClose={() => setModalClienteAbierto(false)}
+                onClienteCreado={handleClienteCreado}
               />
             </>
           )}

@@ -7,7 +7,7 @@ import type { PresupuestoDetalle } from "../../presupuestos/presupuesto.types";
 import type { Capitulo } from "../../capitulos/capitulo.types";
 import type { Detalle } from "../../detalles/detalle.types";
 import type { PresupuestoGenerado } from "../services/post-presupuesto-ia.actions";
-import type { Cliente } from "../../clientes/cliente.types";
+import type { Cliente, ClientesResponse } from "../../clientes/cliente.types";
 
 type Fase = "formulario" | "revision" | "guardado";
 
@@ -17,9 +17,12 @@ export const useGenerarPresupuesto = () => {
   const [capitulos, setCapitulos] = useState<Capitulo[]>([]);
   const [capitulosAbiertos, setCapitulosAbiertos] = useState<Set<string | number>>(new Set());
   const [presupuestoGenerado, setPresupuestoGenerado] = useState<PresupuestoGenerado | null>(null);
+  const [clientes, setClientes] = useState<ClientesResponse | null>(null)
+  const [clienteId, setClienteId] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [presupuestoGuardadoId, setPresupuestoGuardadoId] = useState<string | number | null>(null);
+  const [modalClienteAbierto, setModalClienteAbierto] = useState(false);
 
   const {
     handleAgregarCapitulo,
@@ -121,10 +124,22 @@ export const useGenerarPresupuesto = () => {
     }
   };
 
+  const handleClienteCreado = (clienteNuevo: Cliente) => {
+    if (clientes) {
+      setClientes([...clientes, clienteNuevo]);
+    }
+    setClienteId(clienteNuevo.id);
+    setModalClienteAbierto(false);
+  };
+
   return {
     fase,
     capitulos,
     capitulosAbiertos,
+    clientes,
+    setClientes,
+    clienteId,
+    setClienteId,
     data,
     handleChange,
     handleGenerar,
@@ -143,5 +158,8 @@ export const useGenerarPresupuesto = () => {
     saveError,
     presupuestoGuardadoId,
     presupuestoGenerado,
+    modalClienteAbierto,
+    setModalClienteAbierto,
+    handleClienteCreado,
   };
 };
