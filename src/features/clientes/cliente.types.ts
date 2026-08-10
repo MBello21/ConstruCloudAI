@@ -22,6 +22,10 @@ export interface CreateClienteRequest {
   poblacion: string;
   telefono: string;
   email?: string;
+  cif?: string;
+  estado?: string;
+  tipo?: string;
+  notas?: string;
 }
 
 export interface UpdateClienteRequest {
@@ -30,6 +34,10 @@ export interface UpdateClienteRequest {
   poblacion: string;
   telefono: string;
   email?: string;
+  cif?: string;
+  estado?: string;
+  tipo?: string;
+  notas?: string;
 }
 
 export type ClientesResponse = Cliente[];
