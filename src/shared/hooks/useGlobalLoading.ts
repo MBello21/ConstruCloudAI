@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useCallback, useRef, useEffect } f
 
 interface GlobalLoadingContextType {
   isLoading: boolean;
+  isInitialLoad: boolean;
   registerLoading: (key: string) => void;
   resolveLoading: (key: string) => void;
 }
@@ -11,6 +12,7 @@ export const GlobalLoadingContext = createContext<GlobalLoadingContextType | und
 export const useGlobalLoadingProvider = () => {
   const [pendingSources, setPendingSources] = useState<Set<string>>(new Set(["initialization"]));
   const timeoutRef = useRef<number | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
@@ -27,6 +29,7 @@ export const useGlobalLoadingProvider = () => {
       }
     };
   }, []);
+
 
   const registerLoading = useCallback((key: string) => {
     setPendingSources((prev) => new Set(prev).add(key));
@@ -49,8 +52,13 @@ export const useGlobalLoadingProvider = () => {
   }, []);
 
   const isLoading = pendingSources.size > 0;
+  useEffect(() => {
+    if (!isLoading && isInitialLoad) {
+      setIsInitialLoad(false);
+    }
+  }, [isLoading, isInitialLoad]);
 
-  return { isLoading, registerLoading, resolveLoading };
+  return { isLoading, registerLoading, resolveLoading, isInitialLoad };
 };
 
 export const useGlobalLoading = () => {

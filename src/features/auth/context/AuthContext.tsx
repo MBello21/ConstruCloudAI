@@ -45,6 +45,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const savedToken = localStorage.getItem("access_token");
         if (savedToken) {
           setToken(savedToken);
+          const data = await getUser()
+          setUser(data)
         }
         setIsLoading(false);
       } finally {
@@ -61,10 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const response = await login(credentials);
       localStorage.setItem("access_token", response.access_token);
       localStorage.setItem("token_type", response.token_type);
-      setToken(response.access_token);
-      console.log("Token en localStorage:", localStorage.getItem("access_token"));
-      const data = await getUser()
-      setUser(data)
+      setToken(response.access_token)
       navigate("/panel");
     } catch (error) {
       localStorage.removeItem("access_token");
@@ -75,7 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(false);
     }
   };
-
+  console.log(user)
   const handleSignup = async (credentials: SignupRequest) => {
     setIsLoading(true);
     try {
