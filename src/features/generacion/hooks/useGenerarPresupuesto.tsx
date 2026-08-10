@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGenerarFormulario } from "./useGenerarFormulario";
 import { useCapitulosManager } from "../../capitulos/hooks/useCapitulosManager";
 import { guardarPresupuestoGenerado } from "../services/guardar-presupuesto-generado.action";
+import { getClientes } from "../../clientes/services/get-clientes.action";
 import type { PresupuestoDetalle } from "../../presupuestos/presupuesto.types";
 import type { Capitulo } from "../../capitulos/capitulo.types";
 import type { Detalle } from "../../detalles/detalle.types";
 import type { PresupuestoGenerado } from "../services/post-presupuesto-ia.actions";
+import type { Cliente } from "../../clientes/cliente.types";
 
 type Fase = "formulario" | "revision" | "guardado";
 
@@ -30,6 +32,18 @@ export const useGenerarPresupuesto = () => {
     capitulos,
     setCapitulos,
   });
+
+  useEffect(() => {
+    const fetchClientes = async () => {
+      try {
+        const data = await getClientes();
+        setClientes(data);
+      } catch (err) {
+        console.error("Error cargando clientes:", err);
+      }
+    };
+    fetchClientes();
+  }, []);
 
   const toggleCapitulo = (id: string | number) => {
     setCapitulosAbiertos((prev) => {
@@ -77,10 +91,23 @@ export const useGenerarPresupuesto = () => {
   const handleGuardar = async (): Promise<PresupuestoDetalle | null> => {
     setIsSaving(true);
     setSaveError(null);
-    if (!presupuestoGenerado) return null;
+    if (!presupuestoGenerado) {
+      setSaveError("Error interno: presupuesto no generado");
+      setIsSaving(false);
+      return null;
+    }
+    if (!clienteId) {
+      setSaveError("Debes seleccionar un cliente antes de guardar");
+      setIsSaving(false);
+      return null;
+    }
     try {
+      const presupuestoConCliente = {
+        ...presupuestoGenerado,
+        cliente_id: clienteId,
+      };
       const presupuesto = await guardarPresupuestoGenerado({
-        presupuesto: presupuestoGenerado
+        presupuesto: presupuestoConCliente
       });
       setFase("guardado");
       setPresupuestoGuardadoId(presupuesto.id);

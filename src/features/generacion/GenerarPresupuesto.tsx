@@ -35,6 +35,10 @@ export const GenerarPresupuesto = () => {
   const navigate = useNavigate();
   const blocker = useUnsavedChangesGuard(fase === "revision");
 
+  useEffect(() => {
+    setClientesActualizados(clientes);
+  }, [clientes]);
+
   const handleVolver = () => {
     navigate(-1);
   };
