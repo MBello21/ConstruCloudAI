@@ -5,6 +5,7 @@ export interface EditingField {
 export interface ConfirmDelete {
   tipo: string;
   id: number | string;
+  capituloId?: number | string;
 }
 
 export interface DetalleToDelete {

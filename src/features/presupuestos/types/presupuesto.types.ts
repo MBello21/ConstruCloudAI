@@ -1,4 +1,4 @@
-import type { Capitulo } from "../capitulos/capitulo.types";
+import type { Capitulo } from "../../capitulos/capitulo.types";
 
 export interface PresupuestoReponse {
   total: number;

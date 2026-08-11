@@ -1,7 +1,7 @@
 import FormularioGeneracion from "./components/FormularioGeneracion";
 import SeccionCapitulos from "./components/SeccionCapitulos";
 import BotonesFormulario from "./components/BotonesFormulario";
-import { useGenerarPresupuesto } from "./hooks/useGenerarPresupuesto";
+import { useGenerar } from "./hooks/useGenerar";
 import { useNavigate } from "react-router";
 import { CabeceraFormulario } from "./components/CabeceraFormulario";
 import { useUnsavedChangesGuard } from "../../shared/hooks/useUnsavedChangesGuard";
@@ -39,7 +39,7 @@ export const GenerarPresupuesto = () => {
     modalClienteAbierto,
     setModalClienteAbierto,
     handleClienteCreado,
-  } = useGenerarPresupuesto();
+  } = useGenerar();
   const navigate = useNavigate();
   const blocker = useUnsavedChangesGuard(fase === "revision");
 
