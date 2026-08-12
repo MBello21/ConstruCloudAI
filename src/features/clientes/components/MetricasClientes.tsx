@@ -14,21 +14,16 @@ const MetricasClientes: React.FC<MetricasClientesProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <MetricCard
-        titulo="Clientes Totales"
-        valor={totalClientes}
-        subtitulo="En el sistema"
-      />
+      <MetricCard titulo="Clientes Totales" valor={totalClientes} icon="user" />
       <MetricCard
         titulo="Clientes Activos"
         valor={clientesActivos}
-        subtitulo="Actualmente activos"
-        destacado={true}
+        icon="active"
       />
       <MetricCard
         titulo="Presupuestos Vinculados"
         valor={presupuestosVinculados}
-        subtitulo="Asociados a clientes"
+        icon="linked"
       />
     </div>
   );

@@ -11,3 +11,5 @@ export const formatearFecha = (fecha: string): string => {
     fechaFormateada.slice(4)
   );
 };
+
+

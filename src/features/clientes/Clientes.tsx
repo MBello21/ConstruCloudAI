@@ -66,6 +66,8 @@ export const Clientes = () => {
   const handleCambioPagina = (nuevaPagina: number): void => {
     setPagina(nuevaPagina);
   };
+
+  console.log(clientes);
   return (
     <section className="p-3 px-5 min-h-full bg-gray-100">
       {showSkeleton ? (

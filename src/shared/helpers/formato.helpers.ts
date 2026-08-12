@@ -1,5 +1,10 @@
-export const formatearPrecio = (importe: number): string => {
-  return importe.toLocaleString("es-ES", { minimumFractionDigits: 2 }) + " €";
+export const formatearPrecio = (value: number): string => {
+  return new Intl.NumberFormat("es-ES", {
+    style: "currency",
+    currency: "EUR",
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value);
 };
 
 export const formatearImporte = formatearPrecio;

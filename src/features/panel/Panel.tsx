@@ -11,6 +11,7 @@ import MetricasPanel from "./components/MetricasPanel";
 import useGlobalReducer from "../../state/useGlobalReducer";
 import ModalEditarPresupuesto from "../presupuestos/components/ModalEditarPresupuesto";
 import { useGlobalLoading } from "../../shared/hooks/useGlobalLoading";
+import { ARR_MONTHS } from "../../shared/constants/date.constant";
 
 export const Panel = () => {
   const {
@@ -27,6 +28,8 @@ export const Panel = () => {
   const { isLoading: globalIsLoading } = useGlobalLoading();
   const { pathname } = useLocation();
   const { store } = useGlobalReducer();
+  const year = new Date().getFullYear();
+  const months = ARR_MONTHS.find((m) => m.index === new Date().getMonth());
 
   return (
     <section className="p-3 px-5 min-h-full bg-gray-100">
@@ -34,9 +37,9 @@ export const Panel = () => {
         <SectionHeaderSkeleton />
       ) : (
         <SectionHeader
-          title="PANEL GENERAL"
+          title="Panel general"
           section="Presupuesto de obra"
-          subtitle="Resumen de actividad · Julio 2026"
+          subtitle={`Resumen de actividad · ${months?.month} ${year}`}
           pathname={pathname}
         />
       )}
