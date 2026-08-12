@@ -12,11 +12,11 @@ export const SectionHeader = ({
   return (
     <div className="flex w-full justify-between">
       <div className="w-[80%]">
-        <h2 className="font-sans text-sm text-neutral-500 font-semibold">
+        <h2 className="font-sans uppercase text-xs text-neutral-500 font-semibold">
           {title}
         </h2>
-        <h2 className="font-sans font-bold text-3xl">{section}</h2>
-        <p className="text-neutral-400">{subtitle}</p>
+        <h3 className="font-sans font-bold text-[30px]">{section}</h3>
+        <p className="text-neutral-400 text-[15px]">{subtitle}</p>
       </div>
       <div className="flex justify-end items-end min-h-full w-[20%]">
         {pathname === "/" && (

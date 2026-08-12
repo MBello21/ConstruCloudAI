@@ -3,6 +3,7 @@ import { SquareArrowOutUpRight, SquarePen, Trash2 } from "lucide-react";
 import BadgeEstado from "../../../shared/components/BadgeEstado";
 import type { Cliente } from "../cliente.types";
 import { formatearPrecio } from "../../../shared/helpers";
+import { Link } from "react-router";
 
 interface TablaClientesProps {
   clientes: Cliente[];
@@ -38,7 +39,12 @@ const TablaClientes: React.FC<TablaClientesProps> = ({ clientes }) => {
             className="border-b border-gray-100 hover:bg-gray-50 transition-colors bg-white"
           >
             <td className="px-3 py-5 text-sm font-medium text-neutral-800">
-              {cliente.nombre_cliente}
+              <Link
+                className="cursor-pointer text-neutral-800 hover:text-blue-900"
+                to={`/clientes/${cliente.id}`}
+              >
+                {cliente.nombre_cliente}
+              </Link>
             </td>
             <td className="px-3 py-5 text-sm text-neutral-600">
               {cliente.email && (
@@ -73,7 +79,12 @@ const TablaClientes: React.FC<TablaClientesProps> = ({ clientes }) => {
                   <SquareArrowOutUpRight className="h-5 w-5" />
                 </button>
                 <button className="hover:text-blue-900 transition-colors">
-                  <SquarePen className="h-5 w-5" />
+                  <Link
+                    className="cursor-pointer text-neutral-800 hover:text-blue-900"
+                    to={`/clientes/${cliente.id}`}
+                  >
+                    <SquarePen className="h-5 w-5" />
+                  </Link>
                 </button>
                 <button className="hover:text-red-600 transition-colors">
                   <Trash2 className="h-5 w-5" />

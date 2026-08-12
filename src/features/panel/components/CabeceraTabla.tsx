@@ -11,7 +11,7 @@ const CabeceraTabla: React.FC<CabeceraTablaProps> = ({
   return (
     <div className="flex justify-between items-center p-4 border-b border-gray-300 bg-white">
       <div>
-        <h2 className="font-semibold">Presupuestos recientes</h2>
+        <h4 className="font-semibold">Presupuestos recientes</h4>
         <p className="text-sm text-gray-500">
           {totalRegistros} ultimos registros · ordenados por fecha
         </p>

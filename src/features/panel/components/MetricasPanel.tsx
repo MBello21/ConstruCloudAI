@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import MetricCard from "./MetricCard";
 import { getMetricas } from "../services/get-metricas.action";
 import { formatearPrecio } from "../../../shared/helpers/formato.helpers";
-import type { MetricasResponse } from "../../../shared/types";
+import type { MetricasResponse } from "../../presupuestos/types/presupuesto.types";
 import { useGlobalLoading } from "../../../shared/hooks/useGlobalLoading";
 
 const MetricasPanel: React.FC = () => {
@@ -10,7 +10,11 @@ const MetricasPanel: React.FC = () => {
   // Keep local loading state for potential internal use
   const [_loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { registerLoading, resolveLoading, isLoading: globalIsLoading } = useGlobalLoading();
+  const {
+    registerLoading,
+    resolveLoading,
+    isLoading: globalIsLoading,
+  } = useGlobalLoading();
 
   useEffect(() => {
     const cargarMetricas = async () => {

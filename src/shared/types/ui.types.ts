@@ -1,8 +1,12 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { Presupuesto, PresupuestoElement } from "../../features/presupuestos/presupuesto.types";
+
 import type { Capitulo } from "../../features/capitulos/capitulo.types";
 import type { Detalle } from "../../features/detalles/detalle.types";
 import type { Cliente } from "../../features/clientes/cliente.types";
+import type {
+  Presupuesto,
+  PresupuestoElement,
+} from "../../features/presupuestos/types/presupuesto.types";
 
 export interface BadgeEstadoProps {
   estado: string;
@@ -79,9 +83,10 @@ export interface SeccionCapitulosProps {
 export interface MetricCardProps {
   titulo: string;
   valor: string | number;
-  subtitulo: string;
+  subtitulo?: string;
   variacion?: number;
   destacado?: boolean;
+  icon?: string;
 }
 
 export interface ClienteComboboxProps {
