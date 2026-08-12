@@ -1,22 +1,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import type { PresupuestoDetalle } from "../presupuesto.types";
-import type { Capitulo } from "../../capitulos/capitulo.types";
 import { putPresupuesto } from "../services/put-presupuesto.action";
 import { getPresupuestosByID } from "../services/get-presupuesto-by-id.action";
 import { syncCapitulos } from "../services/sync-presupuesto.service";
-
-interface UsePresupuestoGuardarProps {
-  presupuesto: PresupuestoDetalle | null;
-  capitulos: Capitulo[];
-  presupuestoSnapshot: PresupuestoDetalle | null;
-  capitulosSnapshot: Capitulo[];
-  presupuestoId?: string | number;
-  setPresupuesto: (presupuesto: PresupuestoDetalle) => void;
-  setPresupuestoSnapshot: (presupuesto: PresupuestoDetalle) => void;
-  setCapitulos: (capitulos: Capitulo[]) => void;
-  setCapitulosSnapshot: (capitulos: Capitulo[]) => void;
-}
+import type { UsePresupuestoGuardarProps } from "../types/hooks.types";
 
 export const usePresupuestoGuardar = ({
   presupuesto,
@@ -45,8 +32,7 @@ export const usePresupuestoGuardar = ({
         titulo: presupuesto.titulo,
         descripcion: presupuesto.descripcion,
         estado: presupuesto.estado,
-        cliente_id:
-          presupuesto.cliente_id ?? presupuesto.cliente?.cliente_id,
+        cliente_id: presupuesto.cliente_id ?? presupuesto.cliente?.cliente_id,
         validez_dias: presupuesto.validez_dias,
         condiciones_pago: presupuesto.condiciones_pago,
       });
@@ -61,9 +47,7 @@ export const usePresupuestoGuardar = ({
 
       toast.success("Presupuesto actualizado correctamente");
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Error al guardar",
-      );
+      toast.error(error instanceof Error ? error.message : "Error al guardar");
     } finally {
       setIsSaving(false);
     }

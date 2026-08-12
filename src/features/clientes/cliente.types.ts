@@ -41,3 +41,8 @@ export interface UpdateClienteRequest {
 }
 
 export type ClientesResponse = Cliente[];
+
+export interface ClientesPaginacionResponse {
+  total: number;
+  clientes: Cliente[];
+}

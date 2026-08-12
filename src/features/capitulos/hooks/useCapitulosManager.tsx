@@ -15,8 +15,16 @@ export interface CapitulosManagerActions {
   toggleCapitulo: (id: string | number) => void;
   actualizarNombreCapitulo: (id: string | number, nombre: string) => void;
   agregarDetalle: (capituloId: string | number) => void;
-  eliminarDetalle: (capituloId: string | number, detalleId: string | number) => void;
-  actualizarDetalle: (capituloId: string | number, detalleId: string | number, campo: string, valor: string | number) => void;
+  eliminarDetalle: (
+    capituloId: string | number,
+    detalleId: string | number,
+  ) => void;
+  actualizarDetalle: (
+    capituloId: string | number,
+    detalleId: string | number,
+    campo: string,
+    valor: string | number,
+  ) => void;
 }
 
 export const useCapitulosManager = ({
@@ -24,8 +32,11 @@ export const useCapitulosManager = ({
   setCapitulos,
   presupuestoId,
 }: UseCapitulosManagerProps) => {
-  const [capituloToDelete, setCapituloToDelete] = useState<number | string | null>(null);
-  const [detalleToDelete, setDetalleToDelete] = useState<DetalleToDelete | null>(null);
+  const [capituloToDelete, setCapituloToDelete] = useState<
+    number | string | null
+  >(null);
+  const [detalleToDelete, setDetalleToDelete] =
+    useState<DetalleToDelete | null>(null);
 
   const handleAgregarCapitulo = () => {
     const nuevoCapitulo: Capitulo = {
@@ -66,20 +77,13 @@ export const useCapitulosManager = ({
         return c;
       }),
     );
-    setDetalleToDelete(null);
-  };
-
-  const handleEliminarCapitulo = (id: number | string) => {
-    setCapituloToDelete(id);
   };
 
   const handleActualizarNombreCapitulo = (
     id: number | string,
     nombre: string,
   ) => {
-    setCapitulos(
-      capitulos.map((c) => (c.id === id ? { ...c, nombre } : c)),
-    );
+    setCapitulos(capitulos.map((c) => (c.id === id ? { ...c, nombre } : c)));
   };
 
   const handleAgregarDetalle = (capituloId: number | string) => {
@@ -106,13 +110,6 @@ export const useCapitulosManager = ({
         return c;
       }),
     );
-  };
-
-  const handleEliminarDetalle = (
-    capituloId: number | string,
-    detalleId: number | string,
-  ) => {
-    setDetalleToDelete({ capituloId, detalleId });
   };
 
   const handleActualizarDetalle = (
@@ -145,10 +142,8 @@ export const useCapitulosManager = ({
 
   return {
     handleAgregarCapitulo,
-    handleEliminarCapitulo,
     handleActualizarNombreCapitulo,
     handleAgregarDetalle,
-    handleEliminarDetalle,
     handleActualizarDetalle,
     handleConfirmDeleteCapitulo,
     handleConfirmDeleteDetalle,

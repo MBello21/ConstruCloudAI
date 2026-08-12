@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import type { PresupuestoElement, PresupuestoFormData } from "../presupuesto.types";
+import type {
+  PresupuestoElement,
+  PresupuestoFormData,
+} from "../types/presupuesto.types";
 import { getPresupuestos } from "../services/get-presupuestos.action";
 import { getClientes } from "../../../features/clientes/services/get-clientes.action";
 import useGlobalReducer from "../../../state/useGlobalReducer";

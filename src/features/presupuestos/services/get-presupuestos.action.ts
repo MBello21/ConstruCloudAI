@@ -1,5 +1,5 @@
-import type { PresupuestoReponse } from "../../../shared/types";
 import { construcloudAPI } from "../../../shared/services/construcloud.api";
+import type { PresupuestoReponse } from "../types/presupuesto.types";
 
 export const getPresupuestos = async (
   filtro: string,

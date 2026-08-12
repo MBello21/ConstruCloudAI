@@ -3,7 +3,6 @@ import { usePresupuestoData } from "./usePresupuestoData";
 import { useCapitulosManager } from "../../capitulos/hooks/useCapitulosManager";
 import { usePresupuestoGuardar } from "./usePresupuestoGuardar";
 import { usePresupuestoEliminar } from "./usePresupuestoEliminar";
-
 export const useDetallePresupuesto = () => {
   const { id } = useParams();
 
@@ -25,14 +24,7 @@ export const useDetallePresupuesto = () => {
     handleAgregarCapitulo,
     handleActualizarNombreCapitulo,
     handleAgregarDetalle,
-    handleEliminarDetalle,
     handleActualizarDetalle,
-    handleConfirmDeleteCapitulo,
-    handleConfirmDeleteDetalle,
-    capituloToDelete,
-    detalleToDelete,
-    setCapituloToDelete,
-    setDetalleToDelete,
   } = useCapitulosManager({
     capitulos,
     setCapitulos,
@@ -54,17 +46,11 @@ export const useDetallePresupuesto = () => {
   const {
     confirmDelete,
     setConfirmDelete,
-    confirmarEliminacion,
     handleEliminarCapitulo,
+    handleEliminarDetalle,
+    confirmarEliminacion,
     handleEliminar,
-  } = usePresupuestoEliminar({
-    capitulosSnapshot,
-    setCapitulos,
-    setCapitulosSnapshot,
-    setPresupuesto,
-    setPresupuestoSnapshot,
-    presupuestoDataId: id,
-  });
+  } = usePresupuestoEliminar({ capitulos, setCapitulos });
 
   const handleExportar = () => {
     if (!presupuesto) return;
@@ -96,12 +82,6 @@ export const useDetallePresupuesto = () => {
     handleVolver,
     handleDescartar,
     handleGuardar,
-    handleConfirmDeleteCapitulo,
-    handleConfirmDeleteDetalle,
-    capituloToDelete,
-    detalleToDelete,
-    setCapituloToDelete,
-    setDetalleToDelete,
     blocker,
   };
 };

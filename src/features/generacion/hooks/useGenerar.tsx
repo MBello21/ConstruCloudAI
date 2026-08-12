@@ -3,7 +3,7 @@ import { useGenerarFormulario } from "./useGenerarFormulario";
 import { useCapitulosManager } from "../../capitulos/hooks/useCapitulosManager";
 import { guardarPresupuestoGenerado } from "../services/guardar-presupuesto-generado.action";
 import { getClientes } from "../../clientes/services/get-clientes.action";
-import type { PresupuestoDetalle } from "../../presupuestos/presupuesto.types";
+import type { PresupuestoDetalle } from "../../presupuestos/types/presupuesto.types";
 import type { Capitulo } from "../../capitulos/capitulo.types";
 import type { Detalle } from "../../detalles/detalle.types";
 import type { PresupuestoGenerado } from "../services/post-presupuesto-ia.actions";
@@ -11,25 +11,34 @@ import type { Cliente, ClientesResponse } from "../../clientes/cliente.types";
 
 type Fase = "formulario" | "revision" | "guardado";
 
-export const useGenerarPresupuesto = () => {
-  const { data, handleChange, handleSubmit: handleGenerarIA, isGenerating, error } = useGenerarFormulario();
+export const useGenerar = () => {
+  const {
+    data,
+    handleChange,
+    handleSubmit: handleGenerarIA,
+    isGenerating,
+    error,
+  } = useGenerarFormulario();
   const [fase, setFase] = useState<Fase>("formulario");
   const [capitulos, setCapitulos] = useState<Capitulo[]>([]);
-  const [capitulosAbiertos, setCapitulosAbiertos] = useState<Set<string | number>>(new Set());
-  const [presupuestoGenerado, setPresupuestoGenerado] = useState<PresupuestoGenerado | null>(null);
-  const [clientes, setClientes] = useState<ClientesResponse | null>(null)
+  const [capitulosAbiertos, setCapitulosAbiertos] = useState<
+    Set<string | number>
+  >(new Set());
+  const [presupuestoGenerado, setPresupuestoGenerado] =
+    useState<PresupuestoGenerado | null>(null);
+  const [clientes, setClientes] = useState<ClientesResponse | null>(null);
   const [clienteId, setClienteId] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [presupuestoGuardadoId, setPresupuestoGuardadoId] = useState<string | number | null>(null);
+  const [presupuestoGuardadoId, setPresupuestoGuardadoId] = useState<
+    string | number | null
+  >(null);
   const [modalClienteAbierto, setModalClienteAbierto] = useState(false);
 
   const {
     handleAgregarCapitulo,
-    handleEliminarCapitulo,
     handleActualizarNombreCapitulo,
     handleAgregarDetalle,
-    handleEliminarDetalle,
     handleActualizarDetalle,
   } = useCapitulosManager({
     capitulos,
@@ -66,7 +75,12 @@ export const useGenerarPresupuesto = () => {
     cambios: Partial<Detalle>,
   ) => {
     Object.entries(cambios).forEach(([campo, valor]) => {
-      handleActualizarDetalle(capituloId, detalleId, campo, valor as string | number);
+      handleActualizarDetalle(
+        capituloId,
+        detalleId,
+        campo,
+        valor as string | number,
+      );
     });
   };
 
@@ -75,8 +89,10 @@ export const useGenerarPresupuesto = () => {
     console.log("📊 Response from handleGenerarIA:", response);
     if (response) {
       setCapitulos(response.presupuesto.capitulos);
-      setCapitulosAbiertos(new Set(response.presupuesto.capitulos.map((c) => c.id)));
-      setPresupuestoGenerado(response.presupuesto)
+      setCapitulosAbiertos(
+        new Set(response.presupuesto.capitulos.map((c:Capitulo) => c.id)),
+      );
+      setPresupuestoGenerado(response.presupuesto);
       setFase("revision");
       console.log("✅ Fase changed to 'revision'");
     } else {
@@ -110,13 +126,14 @@ export const useGenerarPresupuesto = () => {
         cliente_id: clienteId,
       };
       const presupuesto = await guardarPresupuestoGenerado({
-        presupuesto: presupuestoConCliente
+        presupuesto: presupuestoConCliente,
       });
       setFase("guardado");
       setPresupuestoGuardadoId(presupuesto.id);
       return presupuesto;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Error desconocido";
+      const errorMessage =
+        err instanceof Error ? err.message : "Error desconocido";
       setSaveError(errorMessage);
       return null;
     } finally {
@@ -131,7 +148,22 @@ export const useGenerarPresupuesto = () => {
     setClienteId(clienteNuevo.id);
     setModalClienteAbierto(false);
   };
+  const handleEliminarCapitulo = (id: number | string) => {
+    setCapitulos((prev) => prev.filter((c) => c.id !== id));
+  };
 
+  const handleEliminarDetalle = (
+    capituloId: number | string,
+    detalleId: number | string,
+  ) => {
+    setCapitulos((prev) =>
+      prev.map((c) =>
+        c.id === capituloId
+          ? { ...c, detalles: c.detalles.filter((d) => d.id !== detalleId) }
+          : c,
+      ),
+    );
+  };
   return {
     fase,
     capitulos,
