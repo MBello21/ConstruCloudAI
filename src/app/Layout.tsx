@@ -10,12 +10,12 @@ export const Layout = () => {
   const { user } = useAuth();
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden ">
       <ScrollToTop />
       <div className="w-70.5 shrink-0">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1 overflow-hidden  bg-slate-100">
         <Navbar />
         <div className="flex-1 overflow-auto">
           <div className="flex-1 overflow-auto">

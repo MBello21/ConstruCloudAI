@@ -1,10 +1,12 @@
 import { NavLink } from "react-router";
 import { NAVEGATION } from "../constants/sidebar-data.constant";
-import { HardHat } from "lucide-react";
+import { HardHat, LogOut } from "lucide-react";
 import { SidebarSkeleton } from "../components/skeletons";
 import { useGlobalLoading } from "../hooks";
+import { useAuth } from "../../features/auth/context/AuthContext";
 export const Sidebar = () => {
   const { isLoading: globalIsLoading } = useGlobalLoading();
+  const { user, logout } = useAuth();
   return (
     <aside className="flex flex-col border-r border-slate-200 max-h-full h-full">
       {globalIsLoading ? (
@@ -49,6 +51,17 @@ export const Sidebar = () => {
                 );
               })}
             </ul>
+          </div>
+          <div className="flex items-center justify-between px-3 py-4 border-t border-slate-200">
+            <div className="flex flex-col w-full">
+              <p className="text-center">{user?.razon_social}</p>
+            </div>
+            <button
+              className="flex items-center gap-3 px-2 py-2 text-slate-700 rounded-md font-medium transition-all duration-200 hover:bg-slate-200 hover:shadow-md "
+              onClick={logout}
+            >
+              <LogOut />
+            </button>
           </div>
         </>
       )}
