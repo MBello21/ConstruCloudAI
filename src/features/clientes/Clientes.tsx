@@ -10,18 +10,24 @@ import SkeletonTablaClientes from "./components/SkeletonTablaClientes";
 import SkeletonFiltrosTabla from "./components/SkeletonFiltrosTabla";
 import { FILTROS_ESTADO_CLIENTES } from "../../shared/helpers/filtro.helpers";
 import type { Cliente } from "./cliente.types";
-import { getClientes } from "./services/get-clientes.action";
 import { useGlobalLoading } from "../../shared/hooks/useGlobalLoading";
+import { PaginacionTabla } from "../panel/components";
+import { getPaginationClientes } from "./services/get-pagination-client.action";
+import { toast } from "sonner";
 
 // Mock data
 const CLIENTES_MOCK: Cliente[] = [];
-
+const ITEMS_POR_PAGINA = 7;
 export const Clientes = () => {
   const { pathname } = useLocation();
   const [filtro, setFiltro] = useState<string>("Todos");
+  const [pagina, setPagina] = useState<number>(1);
+  const [totalRegistros, setTotalRegistros] = useState(0);
   const [clientes, setClientes] = useState<Cliente[]>(CLIENTES_MOCK);
   const [loading, setLoading] = useState(true);
   const { isLoading: globalIsLoading, isInitialLoad } = useGlobalLoading();
+
+  const totalPaginas = Math.ceil(totalRegistros / ITEMS_POR_PAGINA);
 
   const clientesFiltrados = useMemo(() => {
     if (filtro === "Todos") {
@@ -45,15 +51,21 @@ export const Clientes = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await getClientes();
-        setClientes(data);
+        const skip = (pagina - 1) * ITEMS_POR_PAGINA;
+        const data = await getPaginationClientes(filtro, skip);
+        setClientes(data.clientes);
+        setTotalRegistros(data.total);
+      } catch (_error) {
+        toast.error("No se pudo conectar con el servidor. Inténtalo de nuevo.");
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
-
+  }, [pagina, filtro]);
+  const handleCambioPagina = (nuevaPagina: number): void => {
+    setPagina(nuevaPagina);
+  };
   return (
     <section className="p-3 px-5 min-h-full bg-gray-100">
       {showSkeleton ? (
@@ -83,11 +95,13 @@ export const Clientes = () => {
         {showSkeleton ? (
           <SkeletonFiltrosTabla />
         ) : (
-          <FiltrosTabla
-            filtros={FILTROS_ESTADO_CLIENTES}
-            filtro={filtro}
-            setFiltro={setFiltro}
-          />
+          <>
+            <FiltrosTabla
+              filtros={FILTROS_ESTADO_CLIENTES}
+              filtro={filtro}
+              setFiltro={setFiltro}
+            />
+          </>
         )}
       </div>
 
@@ -96,7 +110,14 @@ export const Clientes = () => {
           {showSkeleton ? (
             <SkeletonTablaClientes />
           ) : (
-            <TablaClientes clientes={clientesFiltrados} />
+            <>
+              <TablaClientes clientes={clientesFiltrados} />
+              <PaginacionTabla
+                pagina={pagina}
+                totalPaginas={totalPaginas}
+                onCambioPagina={handleCambioPagina}
+              />
+            </>
           )}
         </div>
       </div>
