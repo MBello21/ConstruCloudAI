@@ -69,7 +69,7 @@ export const Clientes = () => {
 
   console.log(clientes);
   return (
-    <section className="p-3 px-5 min-h-full bg-gray-100">
+    <section className="py-3 px-5 ">
       {showSkeleton ? (
         <SectionHeaderSkeleton />
       ) : (
