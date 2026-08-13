@@ -1,15 +1,16 @@
 import { useState, useRef, useEffect } from "react";
-import type { Cliente } from "../cliente.types";
+
+type ClienteBase = { id: number; nombre_cliente: string };
 
 interface UseClienteComboboxReturn {
   isOpen: boolean;
   searchValue: string;
-  filteredClientes: Cliente[];
-  selectedCliente: Cliente | null;
+  filteredClientes: ClienteBase[];
+  selectedCliente: ClienteBase | null;
   inputRef: React.RefObject<HTMLInputElement>;
   dropdownRef: React.RefObject<HTMLDivElement>;
   handleSearchChange: (value: string) => void;
-  handleSelectCliente: (cliente: Cliente) => void;
+  handleSelectCliente: (cliente: ClienteBase) => void;
   handleDesselect: () => void;
   handleCrearNuevo: () => void;
   openDropdown: () => void;
@@ -17,7 +18,7 @@ interface UseClienteComboboxReturn {
 }
 
 export const useClienteCombobox = (
-  clientes: Cliente[],
+  clientes: ClienteBase[],
   value: number | null,
   onChange: (clienteId: number | null) => void,
   onCrearNuevo: () => void,
@@ -40,7 +41,7 @@ export const useClienteCombobox = (
     setIsOpen(true);
   };
 
-  const handleSelectCliente = (cliente: Cliente) => {
+  const handleSelectCliente = (cliente: ClienteBase) => {
     onChange(cliente.id as number);
     setSearchValue("");
     setIsOpen(false);

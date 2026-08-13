@@ -90,7 +90,7 @@ export interface MetricCardProps {
 }
 
 export interface ClienteComboboxProps {
-  clientes: Cliente[];
+  clientes: { id: number; nombre_cliente: string }[];
   value: number | null;
   onChange: (clienteId: number | null) => void;
   onCrearNuevo: () => void;

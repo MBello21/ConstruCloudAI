@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import type { PresupuestoElement, PresupuestoFormData } from "../../../features/presupuestos/presupuesto.types";
+import type {
+  PresupuestoElement,
+  PresupuestoFormData,
+} from "../../../features/presupuestos/types/presupuesto.types";
 import { getPresupuestos } from "../../../features/presupuestos/services/get-presupuestos.action";
 import { putPresupuesto } from "../../../features/presupuestos/services/put-presupuesto.action";
 import { useGlobalLoading } from "../../../shared/hooks/useGlobalLoading";
