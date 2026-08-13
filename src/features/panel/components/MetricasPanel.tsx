@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MetricCard from "./MetricCard";
 import { getMetricas } from "../services/get-metricas.action";
-import { formatearPrecio } from "../../../shared/helpers/formato.helpers";
+import { formatMetricCards } from "../../../shared/helpers/formato.helpers";
 import type { MetricasResponse } from "../../presupuestos/types/presupuesto.types";
 import { useGlobalLoading } from "../../../shared/hooks/useGlobalLoading";
 
@@ -72,7 +72,7 @@ const MetricasPanel: React.FC = () => {
       />
       <MetricCard
         titulo="Importe adjudicado"
-        valor={formatearPrecio(metricas.importe_total)}
+        valor={formatMetricCards(metricas.importe_total)}
         subtitulo="Valor acumulado"
         variacion={metricas.variacion_importe}
       />

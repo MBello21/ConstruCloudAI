@@ -54,7 +54,7 @@ export const PresupuestoPDFButton = ({
     <button
       onClick={handleDescargar}
       disabled={generando}
-      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+      className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-neutral-600 rounded-lg border border-neutral-600 hover:bg-blue-950 hover:text-white disabled:opacity-50 transition-colors"
     >
       {generando ? "Generando..." : "Exportar PDF"}
     </button>

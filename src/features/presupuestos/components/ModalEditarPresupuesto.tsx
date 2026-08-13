@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
-import type { PresupuestoFormData } from "../presupuesto.types";
+import type { PresupuestoFormData } from "../types/presupuesto.types";
+import ClienteCombobox from "../../clientes/components/ClienteCombobox";
 
 export interface ModalEditarPresupuestoProps {
   isOpen: boolean;
@@ -110,22 +111,15 @@ const ModalEditarPresupuesto: React.FC<ModalEditarPresupuestoProps> = ({
           {/* Cliente */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Cliente
+              Cliente asignado
             </label>
-            <select
-              value={clienteId || ""}
-              onChange={(e) =>
-                setClienteId(e.target.value ? Number(e.target.value) : null)
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-            >
-              <option value="">Seleccionar cliente</option>
-              {clientes.map((cliente) => (
-                <option key={cliente.id} value={cliente.id}>
-                  {cliente.nombre_cliente}
-                </option>
-              ))}
-            </select>
+            <ClienteCombobox
+              clientes={clientes}
+              value={clienteId}
+              onChange={setClienteId}
+              onCrearNuevo={() => {}}
+              placeholder="Seleccionar un cliente.."
+            />
           </div>
         </div>
 
