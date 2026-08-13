@@ -1,7 +1,11 @@
-import React from "react";
-import { ChevronLeft, Trash2, Download } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ChevronLeft, Trash2 } from "lucide-react";
 import BadgeEstado from "../../../shared/components/BadgeEstado";
-import type { PresupuestoDetalle } from "../presupuesto.types";
+import type { PresupuestoDetalle } from "../types/presupuesto.types";
+import { PresupuestoPDFButton } from "./pdf/PresupuestoPDFButton";
+import type { Cliente } from "../../clientes/cliente.types";
+import { getClienteById } from "../../clientes/services/get-cliente-by-id.action";
+import { useAuth } from "../../auth/context/AuthContext";
 
 interface CabeceraDetalleProps {
   presupuesto: PresupuestoDetalle;
@@ -14,8 +18,18 @@ const CabeceraDetalle: React.FC<CabeceraDetalleProps> = ({
   presupuesto,
   onVolver,
   onEliminar,
-  onExportar,
 }) => {
+  const [cliente, setCliente] = useState<Cliente | null>(null);
+  const { user } = useAuth();
+  useEffect(() => {
+    const request = async () => {
+      if (!presupuesto.cliente_id) return;
+      const data = await getClienteById(presupuesto.cliente_id);
+      setCliente(data);
+    };
+    request();
+  }, [presupuesto.cliente_id]);
+  console.log(cliente);
   return (
     <div className="bg-white">
       <div className="max-w-6xl mx-auto border-b border-gray-200 px-6 py-4 mb-8">
@@ -46,13 +60,21 @@ const CabeceraDetalle: React.FC<CabeceraDetalleProps> = ({
           </div>
 
           <div className="flex gap-2">
-            <button
-              onClick={onExportar}
-              className="inline-flex items-center gap-2 px-4 py-2 border border-slate-300 rounded-md font-medium text-sm text-gray-700 hover:bg-gray-50 focus:outline-none transition-colors duration-200"
-            >
-              <Download className="w-4 h-4" />
-              Exportar PDF
-            </button>
+            <PresupuestoPDFButton
+              presupuesto={presupuesto}
+              cliente={cliente ? cliente : undefined}
+              empresa={
+                user
+                  ? {
+                      razon_social: user.razon_social ?? "Mi Empresa",
+                      direccion_fiscal: user.direccion_fiscal ?? undefined,
+                      telefono: user.telefono ?? undefined,
+                      email: user.email ?? undefined,
+                      documento: user.documento ?? undefined,
+                    }
+                  : undefined
+              }
+            />
             <button
               onClick={() => onEliminar(presupuesto.id)}
               className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-300 rounded-md font-medium text-sm text-red-700 hover:bg-red-100 focus:outline-none transition-colors duration-200"
