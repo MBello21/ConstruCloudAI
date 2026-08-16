@@ -59,7 +59,7 @@ export const Navbar = () => {
               </div>
               <div>
                 <h3 className="text-h6 font-semibold text-gray-900">
-                  {user?.nombre_completo || "Bienvenido"}
+                  {user?.nombre_completo}
                 </h3>
                 <p className="text-xs">Panel de Gestión</p>
               </div>

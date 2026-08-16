@@ -52,9 +52,23 @@ export const Sidebar = () => {
               })}
             </ul>
           </div>
-          <div className="flex items-center justify-between px-3 py-4 border-t border-slate-200">
-            <div className="flex flex-col w-full">
-              <p className="text-center text-xs text-slate-600">{user?.nombre_completo || user?.email}</p>
+          <div className="flex items-center justify-between px-3 py-4 border-t border-slate-200 h-16">
+            <div className="flex items-center gap-4 w-full">
+              <div className="bg-blue-950 w-10 h-10 flex justify-center items-center rounded-full shadow-sm border-r border-black">
+                <h3 className="text-h5 font-semibold text-white">
+                  {user?.nombre_completo
+                    ? user.nombre_completo
+                        .split(" ")
+                        .slice(0, 2)
+                        .map((word) => word[0])
+                        .join("")
+                        .toUpperCase()
+                    : "?"}
+                </h3>
+              </div>
+              <p className="text-center text-sm text-slate-600">
+                {user?.email}
+              </p>
             </div>
             <button
               className="flex items-center gap-3 px-2 py-2 text-slate-700 rounded-md font-medium transition-all duration-200 hover:bg-slate-200 hover:shadow-md "
