@@ -5,14 +5,16 @@ interface ModalConfirmarSalidaProps {
   blocker: Blocker;
 }
 
-export const ModalConfirmarSalida = ({ blocker }: ModalConfirmarSalidaProps) => {
+export const ModalConfirmarSalida = ({
+  blocker,
+}: ModalConfirmarSalidaProps) => {
   if (blocker.state !== "blocked") return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
         <div className="flex items-center gap-3 mb-4">
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <AlertTriangle className="w-6 h-6 text-amber-500" />
           </div>
           <h3 className="text-lg font-semibold text-gray-900">

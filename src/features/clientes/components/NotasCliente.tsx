@@ -7,20 +7,21 @@ interface NotasClienteProps {
 }
 
 const NotasCliente: React.FC<NotasClienteProps> = ({
-  notas = "",
+  notas,
   onGuardar,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [notasContent, setNotasContent] = useState(notas);
-
   const handleGuardar = () => {
     if (onGuardar) {
+      if (!notasContent) return;
       onGuardar(notasContent);
     }
     setIsEditing(false);
   };
 
   const handleCancelar = () => {
+    if (!notas) return;
     setNotasContent(notas);
     setIsEditing(false);
   };
@@ -33,20 +34,18 @@ const NotasCliente: React.FC<NotasClienteProps> = ({
 
       {!isEditing ? (
         <>
-          {notasContent ? (
+          {notas ? (
             <p className="text-sm text-gray-700 whitespace-pre-wrap mb-4">
-              {notasContent}
+              {notas ? notas : "Sin notas añadidas"}
             </p>
           ) : (
-            <p className="text-sm text-gray-500 mb-4">
-              Sin notas añadidas
-            </p>
+            <p className="text-sm text-gray-500 mb-4">Sin notas añadidas</p>
           )}
           <button
             onClick={() => setIsEditing(true)}
             className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
           >
-            {notasContent ? "Editar notas" : "Añadir notas"}
+            {notas ? "Editar notas" : "Añadir notas"}
           </button>
         </>
       ) : (

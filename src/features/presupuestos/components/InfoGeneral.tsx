@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
-import type { PresupuestoDetalle } from "../presupuesto.types";
 import type { Cliente } from "../../../features/clientes/cliente.types";
-import type { EditingField } from "../../../shared/types";
-import { getClientes } from "../../../features/clientes/services/get-clientes.action";
 import ClienteCombobox from "../../../features/clientes/components/ClienteCombobox";
+import type { PresupuestoDetalle } from "../types/presupuesto.types";
+import { useActualizarPresupuesto } from "../hooks/useActualizarPresupuesto";
+import EditableField from "../../../shared/components/EditableField";
 
 interface InfoGeneralProps {
   presupuesto: PresupuestoDetalle;
@@ -20,72 +19,20 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
   setClientes,
   setIsModalNuevoCliente,
 }) => {
-  const [editingFields, setEditingFields] = useState<EditingField>({});
-  const [editValues, setEditValues] = useState<{ [key: string]: string }>({});
-
-  useEffect(() => {
-    getClientes().then(setClientes);
-  }, [setClientes]);
-
-  const clienteNombre = useMemo(() => {
-    if (!clientes || !presupuesto) return "Sin cliente asignado";
-    const found = clientes.find(
-      (c: Cliente) =>
-        c.id === (presupuesto.cliente_id || presupuesto.cliente?.cliente_id),
-    );
-    return found?.nombre_cliente || "Sin cliente asignado";
-  }, [clientes, presupuesto]);
-
-  const toggleEdit = (field: string) => {
-    setEditingFields((prev) => {
-      if (prev[field]) {
-        return { ...prev, [field]: false };
-      } else {
-        if (field === "cliente") {
-          // No necesita setEditValues, el combobox maneja su propio estado
-        } else if (field === "validez") {
-          setEditValues((prev) => ({
-            ...prev,
-            [field]: String(presupuesto.validez_dias || 30),
-          }));
-        } else if (field === "condiciones") {
-          setEditValues((prev) => ({
-            ...prev,
-            [field]: presupuesto.condiciones_pago || "Contado",
-          }));
-        } else {
-          setEditValues((prev) => ({
-            ...prev,
-            [field]: String(
-              presupuesto[field as keyof PresupuestoDetalle] || "",
-            ),
-          }));
-        }
-        return { ...prev, [field]: true };
-      }
-    });
-  };
-
-  const handleBlur = (field: string) => {
-    console.log("handleBlur:", field, "value:", editValues[field]);
-    const value = editValues[field];
-    if (value !== undefined) {
-      if (field === "cliente") {
-        onActualizar("cliente_id", Number(value));
-      } else if (field === "validez") {
-        onActualizar("validez_dias", Number(value));
-      } else if (field === "condiciones") {
-        onActualizar("condiciones_pago", value);
-      } else {
-        onActualizar(field, field === "iva" ? parseFloat(value) : value);
-      }
-    }
-    toggleEdit(field);
-  };
-
-  const handleChange = (field: string, value: string) => {
-    setEditValues((prev) => ({ ...prev, [field]: value }));
-  };
+  const {
+    editingFields,
+    setEditingFields,
+    editValues,
+    clienteNombre,
+    toggleEdit,
+    handleBlur,
+    handleChange,
+  } = useActualizarPresupuesto({
+    presupuesto,
+    onActualizar,
+    clientes,
+    setClientes,
+  });
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
@@ -125,100 +72,54 @@ const InfoGeneral: React.FC<InfoGeneralProps> = ({
           )}
         </div>
 
-        <div>
-          <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
-            IVA (%)
-          </label>
-          {editingFields["iva"] ? (
-            <input
-              type="number"
-              value={editValues["iva"] || ""}
-              onChange={(e) => handleChange("iva", e.target.value)}
-              onBlur={() => handleBlur("iva")}
-              autoFocus
-              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
-            />
-          ) : (
-            <p
-              onClick={() => toggleEdit("iva")}
-              className="text-gray-900 cursor-pointer hover:text-blue-950 transition-colors"
-            >
-              {presupuesto.iva}%
-            </p>
-          )}
-        </div>
+        <EditableField
+          label="IVA (%)"
+          value={editValues["iva"] || presupuesto.iva}
+          displayValue={`${presupuesto.iva}%`}
+          type="number"
+          isEditing={editingFields["iva"]}
+          onToggle={() => toggleEdit("iva")}
+          onChange={(value) => handleChange("iva", value)}
+          onBlur={() => handleBlur("iva")}
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-6 mb-6">
-        <div>
-          <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
-            Validez
-          </label>
-          {editingFields["validez"] ? (
-            <input
-              type="text"
-              value={editValues["validez"] || ""}
-              onChange={(e) => handleChange("validez", e.target.value)}
-              onBlur={() => handleBlur("validez")}
-              autoFocus
-              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
-            />
-          ) : (
-            <p
-              onClick={() => toggleEdit("validez")}
-              className="text-gray-900 cursor-pointer hover:text-blue-950 transition-colors"
-            >
-              {presupuesto.validez_dias ?? "30 días"}
-            </p>
-          )}
-        </div>
+        <EditableField
+          label="Validez"
+          value={editValues["validez"] || presupuesto.validez_dias || ""}
+          displayValue={String(presupuesto.validez_dias) || "30 días"}
+          type="text"
+          isEditing={editingFields["validez"]}
+          onToggle={() => toggleEdit("validez")}
+          onChange={(value) => handleChange("validez", value)}
+          onBlur={() => handleBlur("validez")}
+        />
 
-        <div>
-          <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
-            Condiciones de Pago
-          </label>
-          {editingFields["condiciones"] ? (
-            <input
-              type="text"
-              value={editValues["condiciones"] || ""}
-              onChange={(e) => handleChange("condiciones", e.target.value)}
-              onBlur={() => handleBlur("condiciones")}
-              autoFocus
-              className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
-            />
-          ) : (
-            <p
-              onClick={() => toggleEdit("condiciones")}
-              className="text-gray-900 cursor-pointer hover:text-blue-950 transition-colors"
-            >
-              {presupuesto.condiciones_pago ?? "Contado"}
-            </p>
-          )}
-        </div>
+        <EditableField
+          label="Condiciones de Pago"
+          value={
+            editValues["condiciones"] || presupuesto.condiciones_pago || ""
+          }
+          displayValue={presupuesto.condiciones_pago ?? "Contado"}
+          type="text"
+          isEditing={editingFields["condiciones"]}
+          onToggle={() => toggleEdit("condiciones")}
+          onChange={(value) => handleChange("condiciones", value)}
+          onBlur={() => handleBlur("condiciones")}
+        />
       </div>
 
-      <div>
-        <label className="block text-xs font-medium text-gray-600 mb-2 uppercase">
-          Descripción
-        </label>
-        {editingFields["descripcion"] ? (
-          <textarea
-            value={editValues["descripcion"] || ""}
-            onChange={(e) => handleChange("descripcion", e.target.value)}
-            onBlur={() => handleBlur("descripcion")}
-            autoFocus
-            rows={3}
-            className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-950"
-          />
-        ) : (
-          <p
-            onClick={() => toggleEdit("descripcion")}
-            className="text-gray-900 cursor-pointer hover:text-blue-950 transition-colors whitespace-pre-wrap"
-          >
-            {presupuesto.descripcion || "Sin descripción"}
-          </p>
-        )}
-      </div>
+      <EditableField
+        label="Descripción"
+        value={editValues["descripcion"] || presupuesto.descripcion || ""}
+        displayValue={presupuesto.descripcion || "Sin descripción"}
+        type="textarea"
+        isEditing={editingFields["descripcion"]}
+        onToggle={() => toggleEdit("descripcion")}
+        onChange={(value) => handleChange("descripcion", value)}
+        onBlur={() => handleBlur("descripcion")}
+      />
     </div>
   );
 };

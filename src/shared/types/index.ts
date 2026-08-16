@@ -1,4 +1,4 @@
-export * from "../../features/presupuestos/presupuesto.types";
+export * from "../../features/presupuestos/types/presupuesto.types";
 export * from "../../features/capitulos/capitulo.types";
 export * from "../../features/detalles/detalle.types";
 export * from "./navegation.types";
