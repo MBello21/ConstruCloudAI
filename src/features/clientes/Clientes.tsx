@@ -38,7 +38,7 @@ export const Clientes = () => {
 
   const totalClientes = clientes.length;
   const clientesActivos = clientes.filter(
-    (c) => c.estado?.trim() === "Activo",
+    (c) => c.estado?.trim() !== "Inactivo",
   ).length;
   const presupuestosVinculados = clientes.reduce(
     (sum, c) => sum + (c.presupuestos?.length || 0),

@@ -1,10 +1,10 @@
 import { Link } from "react-router";
-import { HardHat, Mail, Lock, Loader } from "lucide-react";
+import { HardHat, Mail, Lock, Loader, User } from "lucide-react";
 import { Button } from "../../shared/components/Button";
 import { useSignup } from "./hooks/useSignup";
 
 export const Signup = () => {
-  const { email, password, confirmPassword, isLoading, error, handleChange, handleSubmit } =
+  const { email, nombreCompleto, password, confirmPassword, isLoading, error, handleChange, handleSubmit } =
     useSignup();
 
   return (
@@ -41,6 +41,25 @@ export const Signup = () => {
                 value={email}
                 onChange={handleChange}
                 placeholder="tu@email.com"
+                disabled={isLoading}
+                className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-md text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-950 focus:border-transparent disabled:bg-slate-50 disabled:cursor-not-allowed"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="nombreCompleto" className="block text-sm font-medium text-slate-700 mb-2">
+              Nombre completo
+            </label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <input
+                type="text"
+                id="nombreCompleto"
+                name="nombreCompleto"
+                value={nombreCompleto}
+                onChange={handleChange}
+                placeholder="Tu nombre completo"
                 disabled={isLoading}
                 className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-md text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-950 focus:border-transparent disabled:bg-slate-50 disabled:cursor-not-allowed"
               />

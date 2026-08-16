@@ -5,7 +5,8 @@ import type { PresupuestoDetalle } from "../types/presupuesto.types";
 import { PresupuestoPDFButton } from "./pdf/PresupuestoPDFButton";
 import type { Cliente } from "../../clientes/cliente.types";
 import { getClienteById } from "../../clientes/services/get-cliente-by-id.action";
-import { useAuth } from "../../auth/context/AuthContext";
+import { getEmpresa } from "../../configuracion/services/get-empresa.action";
+import type { Empresa } from "../../configuracion/types/empresa.types";
 
 interface CabeceraDetalleProps {
   presupuesto: PresupuestoDetalle;
@@ -20,7 +21,7 @@ const CabeceraDetalle: React.FC<CabeceraDetalleProps> = ({
   onEliminar,
 }) => {
   const [cliente, setCliente] = useState<Cliente | null>(null);
-  const { user } = useAuth();
+  const [empresa, setEmpresa] = useState<Empresa | null>(null);
   useEffect(() => {
     const request = async () => {
       if (!presupuesto.cliente_id) return;
@@ -29,6 +30,18 @@ const CabeceraDetalle: React.FC<CabeceraDetalleProps> = ({
     };
     request();
   }, [presupuesto.cliente_id]);
+
+  useEffect(() => {
+    const loadEmpresa = async () => {
+      try {
+        const data = await getEmpresa();
+        setEmpresa(data);
+      } catch (_err) {
+        // silently fail, empresa data is optional
+      }
+    };
+    loadEmpresa();
+  }, []);
   console.log(cliente);
   return (
     <div className="bg-white">
@@ -63,17 +76,7 @@ const CabeceraDetalle: React.FC<CabeceraDetalleProps> = ({
             <PresupuestoPDFButton
               presupuesto={presupuesto}
               cliente={cliente ? cliente : undefined}
-              empresa={
-                user
-                  ? {
-                      razon_social: user.razon_social ?? "Mi Empresa",
-                      direccion_fiscal: user.direccion_fiscal ?? undefined,
-                      telefono: user.telefono ?? undefined,
-                      email: user.email ?? undefined,
-                      documento: user.documento ?? undefined,
-                    }
-                  : undefined
-              }
+              empresa={empresa || undefined}
             />
             <button
               onClick={() => onEliminar(presupuesto.id)}

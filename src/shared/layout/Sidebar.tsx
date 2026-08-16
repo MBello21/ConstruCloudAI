@@ -54,7 +54,7 @@ export const Sidebar = () => {
           </div>
           <div className="flex items-center justify-between px-3 py-4 border-t border-slate-200">
             <div className="flex flex-col w-full">
-              <p className="text-center">{user?.razon_social}</p>
+              <p className="text-center text-xs text-slate-600">{user?.nombre_completo || user?.email}</p>
             </div>
             <button
               className="flex items-center gap-3 px-2 py-2 text-slate-700 rounded-md font-medium transition-all duration-200 hover:bg-slate-200 hover:shadow-md "

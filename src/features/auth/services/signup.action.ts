@@ -3,6 +3,7 @@ import { construcloudAPI } from "../../../shared/services/construcloud.api";
 export interface SignupRequest {
   email: string;
   password: string;
+  nombre_completo?: string;
 }
 
 export interface SignupResponse {

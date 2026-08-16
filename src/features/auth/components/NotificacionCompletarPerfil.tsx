@@ -22,7 +22,7 @@ export const NotificacionCompletarPerfil = ({
     return null;
   }
 
-  const isDatosIncompletos = !user.razon_social || !user.documento;
+  const isDatosIncompletos = !user.nombre_completo;
 
   if (!isDatosIncompletos) {
     return null;
