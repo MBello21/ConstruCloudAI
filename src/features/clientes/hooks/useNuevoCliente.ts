@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import type { Cliente, CreateClienteRequest } from "../cliente.types";
 import { postCliente } from "../services/post-cliente.action";
+import { useNavigate } from "react-router";
 
 interface FormData {
   nombre_cliente: string;
@@ -20,7 +21,10 @@ interface UseNuevoClienteReturn {
   isLoading: boolean;
   errors: Record<string, string>;
   handleInputChange: (field: keyof FormData, value: string) => void;
-  handleSubmit: (onClienteCreado: (cliente: Cliente) => void, onClose: () => void) => Promise<void>;
+  handleSubmit: (
+    onClienteCreado: (cliente: Cliente) => void,
+    onClose: () => void,
+  ) => Promise<void>;
   resetForm: () => void;
 }
 
@@ -40,6 +44,8 @@ export const useNuevoCliente = (): UseNuevoClienteReturn => {
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const navigate = useNavigate();
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -100,7 +106,9 @@ export const useNuevoCliente = (): UseNuevoClienteReturn => {
       const finalData = {
         ...base,
         ...(formData.email.trim() && { email: formData.email.trim() }),
-        ...(formData.direccion.trim() && { direccion: formData.direccion.trim() }),
+        ...(formData.direccion.trim() && {
+          direccion: formData.direccion.trim(),
+        }),
         ...(formData.cif.trim() && { cif: formData.cif.trim() }),
         ...(formData.notas.trim() && { notas: formData.notas.trim() }),
       };
@@ -110,6 +118,7 @@ export const useNuevoCliente = (): UseNuevoClienteReturn => {
       onClienteCreado(nuevoCliente);
       resetForm();
       onClose();
+      navigate("/clientes");
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Error al crear cliente",

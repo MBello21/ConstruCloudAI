@@ -14,8 +14,8 @@ import { useGlobalLoading } from "../../shared/hooks/useGlobalLoading";
 import { PaginacionTabla } from "../panel/components";
 import { getPaginationClientes } from "./services/get-pagination-client.action";
 import { toast } from "sonner";
+import { deleteCliente } from "./services/delete-cliente.action";
 
-// Mock data
 const CLIENTES_MOCK: Cliente[] = [];
 const ITEMS_POR_PAGINA = 7;
 export const Clientes = () => {
@@ -47,6 +47,13 @@ export const Clientes = () => {
 
   const showSkeleton = (globalIsLoading && isInitialLoad) || loading;
 
+  const refreshClientes = async () => {
+    const skip = (pagina - 1) * ITEMS_POR_PAGINA;
+    const data = await getPaginationClientes(filtro, skip);
+    setClientes(data.clientes);
+    setTotalRegistros(data.total);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -63,11 +70,23 @@ export const Clientes = () => {
     };
     fetchData();
   }, [pagina, filtro]);
+  useEffect(() => {
+    const handler = () => refreshClientes();
+    window.addEventListener("cliente-creado", handler);
+    return () => window.removeEventListener("cliente-creado", handler);
+  }, [filtro, pagina, refreshClientes]);
   const handleCambioPagina = (nuevaPagina: number): void => {
     setPagina(nuevaPagina);
   };
 
-  console.log(clientes);
+  const handleDelete = async (id: number) => {
+    await deleteCliente(id);
+    const skip = (pagina - 1) * ITEMS_POR_PAGINA;
+    const data = await getPaginationClientes(filtro, skip);
+    setClientes(data.clientes);
+    setTotalRegistros(data.total);
+  };
+
   return (
     <section className="py-3 px-5 ">
       {showSkeleton ? (
@@ -113,7 +132,10 @@ export const Clientes = () => {
             <SkeletonTablaClientes />
           ) : (
             <>
-              <TablaClientes clientes={clientesFiltrados} />
+              <TablaClientes
+                clientes={clientesFiltrados}
+                onDelete={handleDelete}
+              />
               <PaginacionTabla
                 pagina={pagina}
                 totalPaginas={totalPaginas}
