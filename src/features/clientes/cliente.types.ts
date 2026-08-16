@@ -7,6 +7,7 @@ export interface PresupuestoResumen {
 
 export interface Cliente {
   id: number;
+  codigo: string;
   cif: string;
   nombre_cliente: string;
   direccion?: string;
@@ -14,8 +15,11 @@ export interface Cliente {
   telefono: string;
   email?: string;
   estado?: string;
+  tipo?: string;
   notas?: string;
   presupuestos: PresupuestoResumen[];
+  num_presupuestos?: number;
+  volumen?: number;
 }
 
 export interface CreateClienteRequest {

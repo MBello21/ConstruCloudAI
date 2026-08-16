@@ -1,13 +1,15 @@
-import { Building2, User, Bell, Globe, Shield, CreditCard } from "lucide-react";
+import { Building2, User, Bell, Globe, Shield, CreditCard, Users } from "lucide-react";
+import { useAuth } from "../../auth/context/AuthContext";
 
 export interface ConfigSection {
   id: string;
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   description: string;
+  adminOnly?: boolean;
 }
 
-const sections: ConfigSection[] = [
+const baseSections: ConfigSection[] = [
   {
     id: "empresa",
     icon: Building2,
@@ -19,6 +21,13 @@ const sections: ConfigSection[] = [
     icon: User,
     label: "Perfil",
     description: "Tu información personal",
+  },
+  {
+    id: "usuarios",
+    icon: Users,
+    label: "Usuarios",
+    description: "Gestión de equipo",
+    adminOnly: true,
   },
   {
     id: "notificaciones",
@@ -55,6 +64,15 @@ export const ConfigSidebar = ({
   activeSection,
   onSectionChange,
 }: ConfigSidebarProps) => {
+  const { user } = useAuth();
+
+  const sections = baseSections.filter((section) => {
+    if (section.adminOnly) {
+      return user?.rol === "admin";
+    }
+    return true;
+  });
+
   return (
     <div className="bg-white rounded-lg border border-slate-200 p-4 h-fit">
       <nav className="space-y-1">

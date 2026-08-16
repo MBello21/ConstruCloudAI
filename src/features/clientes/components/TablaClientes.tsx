@@ -35,7 +35,7 @@ const TablaClientes: React.FC<TablaClientesProps> = ({ clientes }) => {
       <tbody>
         {clientes.map((cliente) => (
           <tr
-            key={cliente.id}
+            key={cliente.codigo}
             className="border-b border-gray-100 hover:bg-gray-50 transition-colors bg-white"
           >
             <td className="px-3 py-5 text-sm font-medium text-neutral-800">
@@ -63,12 +63,10 @@ const TablaClientes: React.FC<TablaClientesProps> = ({ clientes }) => {
             </td>
             <td className="px-3 py-5 text-sm text-neutral-600">Empresa</td>
             <td className="px-3 py-5 text-sm font-medium text-center">
-              {cliente.presupuestos?.length || 0}
+              {cliente.num_presupuestos || 0}
             </td>
             <td className="px-3 py-5 text-sm font-medium text-neutral-800">
-              {formatearPrecio(
-                cliente.presupuestos?.reduce((sum, p) => sum + p.total, 0) || 0,
-              )}
+              {formatearPrecio(cliente.volumen || 0)}
             </td>
             <td className="px-3 py-5 text-sm">
               <BadgeEstado estado={cliente.estado || "Activo"} />

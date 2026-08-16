@@ -27,6 +27,8 @@ export const ClienteDetalle = () => {
     presupuestosAdjudicados,
     importeAdjudicado,
   } = useClienteDetalle();
+
+  console.log(cliente);
   return (
     <section className="min-h-screen bg-gray-100">
       <div className="">
@@ -46,7 +48,7 @@ export const ClienteDetalle = () => {
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-sm font-medium text-gray-700 bg-gray-200 px-3 py-1 rounded-full">
-                  ID: {cliente?.id}
+                  Codigo: {cliente?.codigo}
                 </span>
                 <BadgeEstado estado={cliente?.estado || "Activo"} />
                 <span className="text-sm text-gray-600">Tipo: Empresa</span>

@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 export const useSignup = () => {
   const { signup } = useAuth();
   const [email, setEmail] = useState("");
+  const [nombreCompleto, setNombreCompleto] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +14,8 @@ export const useSignup = () => {
     const { name, value } = e.target;
     if (name === "email") {
       setEmail(value);
+    } else if (name === "nombreCompleto") {
+      setNombreCompleto(value);
     } else if (name === "password") {
       setPassword(value);
     } else if (name === "confirmPassword") {
@@ -57,7 +60,7 @@ export const useSignup = () => {
     setError("");
 
     try {
-      await signup({ email, password });
+      await signup({ email, password, nombre_completo: nombreCompleto });
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -70,6 +73,7 @@ export const useSignup = () => {
 
   return {
     email,
+    nombreCompleto,
     password,
     confirmPassword,
     isLoading,

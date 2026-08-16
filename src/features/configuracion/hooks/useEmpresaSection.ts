@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { getEmpresa } from "../services/get-empresa.action";
 import { putEmpresa } from "../services/put-empresa.action";
-import type { Empresa } from "../types/empresa.types";
+import type { Empresa, EmpresaUpdate } from "../types/empresa.types";
 
-export interface FormData {
+interface FormData {
   razon_social: string;
   documento: string;
   direccion_fiscal: string;
@@ -12,7 +12,7 @@ export interface FormData {
   web: string;
 }
 
-export const useEmpresaForm = () => {
+export const useEmpresaSection = () => {
   const [empresa, setEmpresa] = useState<Empresa | null>(null);
   const [formData, setFormData] = useState<FormData>({
     razon_social: "",
@@ -22,6 +22,7 @@ export const useEmpresaForm = () => {
     email: "",
     web: "",
   });
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -41,8 +42,11 @@ export const useEmpresaForm = () => {
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : "Error al cargar los datos");
+      } finally {
+        setIsLoading(false);
       }
     };
+
     loadEmpresa();
   }, []);
 
@@ -51,12 +55,13 @@ export const useEmpresaForm = () => {
     formData.documento !== (empresa.documento || "") ||
     formData.direccion_fiscal !== (empresa.direccion_fiscal || "") ||
     formData.telefono !== (empresa.telefono || "") ||
+    formData.email !== (empresa.email || "") ||
     formData.web !== (empresa.web || "")
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setError(null);
     setSuccess(false);
   };
@@ -70,15 +75,25 @@ export const useEmpresaForm = () => {
     setSuccess(false);
 
     try {
-      const updatedEmpresa = await putEmpresa({
+      const updateData: EmpresaUpdate = {
         razon_social: formData.razon_social || undefined,
         documento: formData.documento || undefined,
         direccion_fiscal: formData.direccion_fiscal || undefined,
         telefono: formData.telefono || undefined,
+        email: formData.email || undefined,
         web: formData.web || undefined,
-      });
+      };
 
+      const updatedEmpresa = await putEmpresa(updateData);
       setEmpresa(updatedEmpresa);
+      setFormData({
+        razon_social: updatedEmpresa.razon_social || "",
+        documento: updatedEmpresa.documento || "",
+        direccion_fiscal: updatedEmpresa.direccion_fiscal || "",
+        telefono: updatedEmpresa.telefono || "",
+        email: updatedEmpresa.email || "",
+        web: updatedEmpresa.web || "",
+      });
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
@@ -90,6 +105,7 @@ export const useEmpresaForm = () => {
 
   return {
     formData,
+    isLoading,
     isSaving,
     error,
     success,

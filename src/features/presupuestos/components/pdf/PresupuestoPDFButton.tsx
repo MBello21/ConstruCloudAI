@@ -8,11 +8,11 @@ interface Props {
   presupuesto: PresupuestoDetalle;
   cliente?: Cliente | null;
   empresa?: {
-    razon_social: string;
-    direccion_fiscal?: string;
-    telefono?: string;
-    email?: string;
-    documento?: string;
+    razon_social?: string | null;
+    direccion_fiscal?: string | null;
+    telefono?: string | null;
+    email?: string | null;
+    documento?: string | null;
   };
 }
 

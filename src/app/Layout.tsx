@@ -15,7 +15,7 @@ export const Layout = () => {
       <div className="w-70.5 shrink-0">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1 overflow-hidden  bg-slate-100">
+      <div className="flex flex-col flex-1 overflow-hidden  bg-gray-100">
         <Navbar />
         <div className="flex-1 overflow-auto">
           <div className="flex-1 overflow-auto">
