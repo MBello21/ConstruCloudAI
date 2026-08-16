@@ -1,15 +1,18 @@
 import React from "react";
-import { SquareArrowOutUpRight, SquarePen, Trash2 } from "lucide-react";
+import { SquarePen, Trash2 } from "lucide-react";
 import BadgeEstado from "../../../shared/components/BadgeEstado";
 import type { Cliente } from "../cliente.types";
 import { formatearPrecio } from "../../../shared/helpers";
 import { Link } from "react-router";
-
 interface TablaClientesProps {
   clientes: Cliente[];
+  onDelete: (id: number) => Promise<void>;
 }
 
-const TablaClientes: React.FC<TablaClientesProps> = ({ clientes }) => {
+const TablaClientes: React.FC<TablaClientesProps> = ({
+  clientes,
+  onDelete,
+}) => {
   if (clientes.length === 0) {
     return (
       <div className="p-8 text-center text-gray-500">
@@ -74,9 +77,6 @@ const TablaClientes: React.FC<TablaClientesProps> = ({ clientes }) => {
             <td className="px-3 py-5 text-sm">
               <div className="flex gap-2">
                 <button className="hover:text-blue-900 transition-colors">
-                  <SquareArrowOutUpRight className="h-5 w-5" />
-                </button>
-                <button className="hover:text-blue-900 transition-colors">
                   <Link
                     className="cursor-pointer text-neutral-800 hover:text-blue-900"
                     to={`/clientes/${cliente.id}`}
@@ -84,7 +84,10 @@ const TablaClientes: React.FC<TablaClientesProps> = ({ clientes }) => {
                     <SquarePen className="h-5 w-5" />
                   </Link>
                 </button>
-                <button className="hover:text-red-600 transition-colors">
+                <button
+                  className="hover:text-red-600 transition-colors"
+                  onClick={() => onDelete(cliente.id)}
+                >
                   <Trash2 className="h-5 w-5" />
                 </button>
               </div>

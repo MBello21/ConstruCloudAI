@@ -15,6 +15,7 @@ export const Navbar = () => {
 
   const handleClienteCreado = (_cliente: Cliente) => {
     setModalAbierto(false);
+    window.dispatchEvent(new Event("cliente-creado"));
   };
 
   return (
