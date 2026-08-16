@@ -1,6 +1,6 @@
 import { construcloudAPI } from "../../../shared/services/construcloud.api";
 import type { Capitulo } from "../../capitulos/capitulo.types";
-import type { PresupuestoDetalle } from "../../presupuestos/presupuesto.types";
+import type { PresupuestoDetalle } from "../../presupuestos/types/presupuesto.types";
 
 export interface PresupuestoGenerado {
   titulo: string

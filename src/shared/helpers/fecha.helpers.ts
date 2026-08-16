@@ -11,5 +11,4 @@ export const formatearFecha = (fecha: string): string => {
     fechaFormateada.slice(4)
   );
 };
-
-
+export const clienteDesde = new Date().getFullYear();

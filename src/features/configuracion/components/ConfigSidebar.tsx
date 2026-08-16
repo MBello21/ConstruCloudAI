@@ -51,7 +51,10 @@ interface ConfigSidebarProps {
   onSectionChange: (sectionId: string) => void;
 }
 
-export const ConfigSidebar = ({ activeSection, onSectionChange }: ConfigSidebarProps) => {
+export const ConfigSidebar = ({
+  activeSection,
+  onSectionChange,
+}: ConfigSidebarProps) => {
   return (
     <div className="bg-white rounded-lg border border-slate-200 p-4 h-fit">
       <nav className="space-y-1">
@@ -69,10 +72,14 @@ export const ConfigSidebar = ({ activeSection, onSectionChange }: ConfigSidebarP
                   : "text-slate-900 hover:bg-slate-50"
               }`}
             >
-              <Icon className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isActive ? "text-white" : "text-slate-500"}`} />
+              <Icon
+                className={`w-5 h-5 shrink-0 mt-0.5 ${isActive ? "text-white" : "text-slate-500"}`}
+              />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{section.label}</span>
-                <span className={`text-xs ${isActive ? "text-blue-100" : "text-slate-500"}`}>
+                <span
+                  className={`text-xs ${isActive ? "text-blue-100" : "text-slate-500"}`}
+                >
                   {section.description}
                 </span>
               </div>

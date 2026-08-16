@@ -7,12 +7,14 @@ export interface PresupuestoResumen {
 
 export interface Cliente {
   id: number;
+  cif: string;
   nombre_cliente: string;
   direccion?: string;
   poblacion: string;
   telefono: string;
   email?: string;
   estado?: string;
+  notas?: string;
   presupuestos: PresupuestoResumen[];
 }
 
@@ -29,10 +31,10 @@ export interface CreateClienteRequest {
 }
 
 export interface UpdateClienteRequest {
-  nombre_cliente: string;
+  nombre_cliente?: string;
   direccion?: string;
-  poblacion: string;
-  telefono: string;
+  poblacion?: string;
+  telefono?: string;
   email?: string;
   cif?: string;
   estado?: string;
