@@ -1,0 +1,13 @@
+src/features/presupuestos/components/CabeceraDetalle.tsx:import type { PresupuestoDetalle } from "../../types";
+src/features/presupuestos/components/CapituloItem.tsx:import type { Capitulo } from "../../types";
+src/features/presupuestos/components/FilaDetalle.tsx:import type { Detalle } from "../../types";
+src/features/presupuestos/components/FormularioGeneracion.tsx:import type { FormularioGeneracionProps } from "../../types";
+src/features/presupuestos/components/InfoGeneral.tsx:import type { Cliente, PresupuestoDetalle, EditingField } from "../../types";
+src/features/presupuestos/components/SeccionCapitulos.tsx:import type { SeccionCapitulosProps, Detalle } from "../../types";
+src/features/presupuestos/components/SeccionCapitulosDetalle.tsx:import type { Capitulo } from "../../types";
+src/features/presupuestos/components/TablaDetalles.tsx:import type { Detalle } from "../../types";
+src/features/presupuestos/services/delete-presupuesto.action.ts:import type { DeletePresupuestoResponse } from "../../../types";
+src/features/presupuestos/services/get-metricas.action.ts:import type { MetricasResponse } from "../../../types";
+src/features/presupuestos/services/get-presupuesto-by-id.action.ts:import type { PresupuestoDetalle } from "../../../types";
+src/features/presupuestos/services/get-presupuestos.action.ts:import type { PresupuestoReponse } from "../../../types";
+src/features/presupuestos/services/put-presupuesto.action.ts:} from "../../../types";
